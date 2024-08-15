@@ -6,6 +6,7 @@ import ProductItem from "./shop/ProductItem";
 import CustomButton from "./ui/CustomizeButton";
 import StarRate from "./ui/StarRate";
 import RangeSlider from "./auth/RangeSlider";
+import ModalPopUp from "./ui/ModalPopUp";
 
 export {
   CustomButton,
@@ -16,4 +17,5 @@ export {
   Topheader,
   RangeSlider,
   NavHeader,
+  ModalPopUp,
 };

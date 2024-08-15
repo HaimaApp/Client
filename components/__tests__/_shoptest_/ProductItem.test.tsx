@@ -21,23 +21,27 @@ const sampleProduct: Product = {
 
 describe("ProductItem Component", () => {
   it("renders correctly with given props", () => {
+    console.log("Rendering ProductItem with props");
     const { getByTestId } = render(<ProductItem data={sampleProduct} />);
 
     // Check if the title is rendered correctly
-    expect(getByTestId("product-title").props.children).toBe(
-      sampleProduct.title.substring(0, 18)
-    );
+    console.log("Checking product title");
+    const title = getByTestId("product-title");
+    expect(title.props.children).toBe(sampleProduct.title.substring(0, 18));
 
     // Check if the price is formatted correctly
-    expect(getByTestId("product-price").props.children).toBe(
-      formatGBPCurrency(sampleProduct.price)
-    );
+    console.log("Checking product price");
+    const price = getByTestId("product-price");
+    expect(price.props.children).toBe(formatGBPCurrency(sampleProduct.price));
 
     // Check if the image is rendered
-    expect(getByTestId("product-image")).toBeTruthy();
+    console.log("Checking product image");
+    const image = getByTestId("product-image");
+    expect(image).toBeTruthy();
   });
 
   it("navigates to the correct detail page when image is pressed", () => {
+    console.log("Testing navigation to detail page");
     const { getByTestId } = render(<ProductItem data={sampleProduct} />);
 
     // Mock function for navigation
@@ -52,9 +56,11 @@ describe("ProductItem Component", () => {
   });
 
   it("renders the heart icon", () => {
+    console.log("Testing rendering of heart icon");
     const { getByTestId } = render(<ProductItem data={sampleProduct} />);
 
     // Check if the heart icon is rendered
-    expect(getByTestId("heart-icon")).toBeTruthy();
+    const heartIcon = getByTestId("heart-icon");
+    expect(heartIcon).toBeTruthy();
   });
 });

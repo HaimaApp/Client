@@ -101,7 +101,7 @@ const SellModalScreen = () => {
 
   const simulateUpload = (_: any, index: number) => {
     return new Promise<void>((resolve) => {
-      const totalTime = 10000; // 10 seconds
+      const totalTime = 3000; // 10 seconds
       const intervalTime = 100;
       let progress = 0;
 
@@ -195,7 +195,7 @@ const SellModalScreen = () => {
               <View className="w-full flex-col items-start justify-start space-y-6">
                 <View
                   className={`w-full border-[1.5px]  border-dashed ${
-                    images.length > 0
+                    images.length > 0 && !uploading
                       ? "border-[#5FC381]"
                       : uploading
                       ? "border-primary bg-[#FBFEFC]"
