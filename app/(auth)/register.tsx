@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomButton, FormField, Topheader } from "@/components";
@@ -9,40 +9,50 @@ import { router } from "expo-router";
 import { authFormValueType } from "@/types";
 import Toast from "react-native-toast-message";
 import { MaterialIcons } from "@expo/vector-icons";
+import { registerUser } from "@/lib/apis/auth";
+import { getErrorMessage } from "@/hooks";
 
 const passwordRequirement = ["At least 6 characters", "Contain a number"];
 
 const CreateAnAccountScreen = () => {
+  const [sending, setSending] = useState(false);
+
   const initialValues: authFormValueType = {
     email: "",
     password: "",
   };
 
-  const onSubmit = (payload: authFormValueType, action: any) => {
-    console.log(payload);
-    Toast.show({
-      type: "success",
-      text1: "We’ve sent you 4-digit code to your Mail",
-      position: "bottom",
-    });
-    router.push(`/verifyemail/${payload.email}`);
-
-    action.resetForm();
+  const onSubmit = async (payload: authFormValueType, action: any) => {
+    try {
+      setSending(true);
+      const response = await registerUser(payload);
+      Toast.show({
+        type: "success",
+        text1: "We’ve sent you 4-digit code to your Mail",
+        position: "top",
+      });
+      router.push(`/verifyemail/${payload.email}`);
+      action.resetForm();
+      setSending(false);
+      return response;
+    } catch (error: any) {
+      const errorMessage = getErrorMessage(error, "Registration Error");
+      Toast.show({
+        type: "error",
+        text1: errorMessage,
+        position: "top",
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
-  const {
-    values,
-    handleChange,
-    handleBlur,
-    errors,
-    touched,
-    isSubmitting,
-    handleSubmit,
-  } = useFormik({
-    initialValues,
-    validationSchema: authFormSchema,
-    onSubmit,
-  });
+  const { values, handleChange, handleBlur, errors, touched, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema: authFormSchema,
+      onSubmit,
+    });
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -68,7 +78,7 @@ const CreateAnAccountScreen = () => {
                   touched.email && errors.email ? "!border-red-500" : ""
                 } pl-[45px]`}
               />
-              <View className="flex-row items-center justify-start space-x-2 absolute top-[68%] left-[6%]">
+              <View className="flex-row items-center justify-start space-x-2 absolute top-[68%] left-[16px]">
                 <Image source={icons.mailIcon} resizeMode="contain" />
               </View>
             </View>
@@ -96,7 +106,7 @@ const CreateAnAccountScreen = () => {
                   touched.password && errors.password ? "!border-red-500" : ""
                 } pl-[45px]`}
               />
-              <View className="flex-row items-center justify-start space-x-2 absolute top-[68%] left-[6%]">
+              <View className="flex-row items-center justify-start space-x-2 absolute top-[68%] left-[16px]">
                 <Image source={icons.lockIcon} resizeMode="contain" />
               </View>
             </View>
@@ -142,7 +152,7 @@ const CreateAnAccountScreen = () => {
               title="Create Account"
               containerStyles="bg-primary mt-3 w-full py-3"
               titleStyle="text-base font-medium text-black"
-              isLoading={isSubmitting}
+              isLoading={sending}
               handlePress={handleSubmit}
             />
             <View className="py-3 w-full flex-row items-center justify-center">
@@ -163,8 +173,6 @@ const CreateAnAccountScreen = () => {
               }
               containerStyles="w-full py-3 mt-3 border border-primary"
               titleStyle="text-base font-medium text-black"
-              isLoading={isSubmitting}
-              handlePress={handleSubmit}
             />
             <CustomButton
               title={
@@ -175,14 +183,12 @@ const CreateAnAccountScreen = () => {
                     resizeMode="contain"
                   />
                   <Text className="text-base font-medium text-white">
-                    Sign in with Google
+                    Sign in with Apple
                   </Text>
                 </View>
               }
               containerStyles="w-full py-3 mt-3 bg-black border border-black"
               titleStyle="text-base font-medium text-black"
-              isLoading={isSubmitting}
-              handlePress={handleSubmit}
             />
             <View className="flex-row items-center justify-center space-x-1 py-4 w-full">
               <Text className="text-sm font-normal text-black">

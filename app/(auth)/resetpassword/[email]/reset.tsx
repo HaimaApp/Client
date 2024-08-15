@@ -1,38 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomButton, FormField, Topheader } from "@/components";
 import { resetFormSchema } from "@/schema";
 import { useFormik } from "formik";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { resetFormValueType } from "@/types";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import { resetPassword } from "@/lib/apis/auth";
+import { getErrorMessage } from "@/hooks";
+import Toast from "react-native-toast-message";
 
 const ResetPasswordScreen = () => {
+  const [sending, setSending] = useState(false);
+  const { email } = useLocalSearchParams<{ email?: string }>();
+
+  if (!email) return;
+
   const initialValues: resetFormValueType = {
+    email: email,
     password: "",
     confirm_password: "",
   };
 
-  const onSubmit = (payload: resetFormValueType, action: any) => {
-    console.log(payload);
-    router.push(`/resetpassword/success`);
-    action.resetForm();
+  const onSubmit = async (payload: resetFormValueType, action: any) => {
+    const newPayload = {
+      email: payload.email,
+      password: payload.email,
+    };
+
+    try {
+      setSending(true);
+      const response = await resetPassword(newPayload);
+      router.push(`/resetpassword/success`);
+      action.resetForm();
+      setSending(false);
+      return response;
+    } catch (error: any) {
+      const errorMessage = getErrorMessage(error, "Reset Password Error");
+      Toast.show({
+        type: "error",
+        text1: errorMessage,
+        position: "top",
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
-  const {
-    values,
-    handleChange,
-    handleBlur,
-    errors,
-    touched,
-    isSubmitting,
-    handleSubmit,
-  } = useFormik({
-    initialValues,
-    validationSchema: resetFormSchema,
-    onSubmit,
-  });
+  const { values, handleChange, handleBlur, errors, touched, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema: resetFormSchema,
+      onSubmit,
+    });
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView
@@ -96,11 +118,12 @@ const ResetPasswordScreen = () => {
               <Text style={{ color: "red" }}>{errors.confirm_password}</Text>
             </View>
           ) : null}
+
           <CustomButton
             title="Reset password"
             containerStyles="bg-primary my-8 w-full py-4"
             titleStyle="text-base font-medium text-black"
-            isLoading={isSubmitting}
+            isLoading={sending}
             handlePress={handleSubmit}
           />
         </View>

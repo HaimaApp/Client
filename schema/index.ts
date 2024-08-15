@@ -21,7 +21,7 @@ export const personalFormSchema = yup.object().shape({
   first_name: yup.string().required("Required"),
   last_name: yup.string().required("Required"),
   username: yup.string().required("Required"),
-  mobile_number: yup.string().required("Required"),
+  mobile_no: yup.string().required("Required"),
   email: yup.string().email("Invalid email address").required("Required"),
   location: yup.string().required("Required"),
 });

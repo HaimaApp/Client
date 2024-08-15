@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -13,36 +13,48 @@ import { router } from "expo-router";
 import { personalFormSchema } from "@/schema";
 import { personalFormValueType } from "@/types";
 import { MaterialIcons } from "@expo/vector-icons";
+import { createUserProfile } from "@/lib/apis/auth";
+import { getErrorMessage } from "@/hooks";
+import Toast from "react-native-toast-message";
 
 const ProfileDetailFillScreen = () => {
+  const [sending, setSending] = useState(false);
+
   const initialValues: personalFormValueType = {
     first_name: "",
     last_name: "",
     username: "",
-    mobile_number: "",
+    mobile_no: "",
     email: "",
     location: "",
   };
 
-  const onSubmit = (payload: personalFormValueType, action: any) => {
-    console.log(payload);
-    router.push(`/profiledetail/success`);
-    action.resetForm();
+  const onSubmit = async (payload: personalFormValueType, action: any) => {
+    try {
+      setSending(true);
+      const response = await createUserProfile(payload);
+      router.push(`/profiledetail/success`);
+      action.resetForm();
+      setSending(false);
+      return response;
+    } catch (error: any) {
+      const errorMessage = getErrorMessage(error, "Create User Profile Error");
+      Toast.show({
+        type: "error",
+        text1: errorMessage,
+        position: "top",
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
-  const {
-    values,
-    handleChange,
-    handleBlur,
-    errors,
-    touched,
-    isSubmitting,
-    handleSubmit,
-  } = useFormik({
-    initialValues,
-    validationSchema: personalFormSchema,
-    onSubmit,
-  });
+  const { values, handleChange, handleBlur, errors, touched, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema: personalFormSchema,
+      onSubmit,
+    });
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -137,22 +149,20 @@ const ProfileDetailFillScreen = () => {
                   </Text>
                 }
                 titleShow={true}
-                value={values.mobile_number}
-                handleChangeText={handleChange("mobile_number")}
-                onBlur={handleBlur("mobile_number")}
+                value={values.mobile_no}
+                handleChangeText={handleChange("mobile_no")}
+                onBlur={handleBlur("mobile_no")}
                 otherStyles="mt-4"
                 placeholder="Enter your mobile number"
                 keyboardType="numeric"
                 errorClass={`${
-                  touched.mobile_number && errors.mobile_number
-                    ? "!border-red-500"
-                    : ""
+                  touched.mobile_no && errors.mobile_no ? "!border-red-500" : ""
                 }`}
               />
-              {touched.mobile_number && errors.mobile_number ? (
+              {touched.mobile_no && errors.mobile_no ? (
                 <View className="flex-row items-center space-x-2">
                   <MaterialIcons name="error-outline" size={16} color="red" />
-                  <Text style={{ color: "red" }}>{errors.mobile_number}</Text>
+                  <Text style={{ color: "red" }}>{errors.mobile_no}</Text>
                 </View>
               ) : null}
               <FormField
@@ -202,7 +212,7 @@ const ProfileDetailFillScreen = () => {
                 title="Submit"
                 containerStyles="bg-primary mt-6 w-full py-3"
                 titleStyle="text-base font-medium text-black"
-                isLoading={isSubmitting}
+                isLoading={sending}
                 handlePress={handleSubmit}
               />
             </View>

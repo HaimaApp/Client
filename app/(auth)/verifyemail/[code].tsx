@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -18,38 +18,90 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from "react-native-confirmation-code-field";
+import { emailOtpVerify, resendEmailOtpVerify } from "@/lib/apis/auth";
+import { getErrorMessage } from "@/hooks";
+import Toast from "react-native-toast-message";
 
 const CELL_COUNT = 4;
 
 const VerifyEmailCodeScreen = () => {
-  // const { code } = useLocalSearchParams<{ code?: string }>();
-  // const sentpayload = code && JSON.parse(code);
+  const [sending, setSending] = useState(false);
+  const [resendCountdown, setResendCountdown] = useState(90);
+  const [resendEnabled, setResendEnabled] = useState(false);
+
+  const { code } = useLocalSearchParams<{ code?: string }>();
 
   const initialValues: otpFormValueType = {
-    otp_code: "",
+    otp: "",
   };
 
-  const onSubmit = (payload: otpFormValueType, action: any) => {
-    console.log(payload);
-    router.push(`/verifyemail/success`);
-    action.resetForm();
+  const onSubmit = async (payload: otpFormValueType, action: any) => {
+    try {
+      setSending(true);
+      const response = await emailOtpVerify(payload);
+      router.push(`/verifyemail/success`);
+      action.resetForm();
+      setSending(false);
+      return response;
+    } catch (error: any) {
+      const errorMessage = getErrorMessage(error, "Incorrect OTP, Check and retry");
+      Toast.show({
+        type: "error",
+        text1: errorMessage,
+        position: "top",
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
-  const { values, isSubmitting, setFieldValue, handleSubmit } = useFormik({
+  const { values, setFieldValue, handleSubmit } = useFormik({
     initialValues,
     validationSchema: otpVerifySchema,
     onSubmit,
   });
 
   const ref = useBlurOnFulfill({
-    value: values.otp_code,
+    value: values.otp,
     cellCount: CELL_COUNT,
   });
 
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
-    value: values.otp_code,
-    setValue: (code) => setFieldValue("otp_code", code),
+    value: values.otp,
+    setValue: (code) => setFieldValue("otp", code),
   });
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (resendCountdown > 0) {
+      timer = setTimeout(() => {
+        setResendCountdown(resendCountdown - 1);
+      }, 1000);
+    } else {
+      setResendEnabled(true);
+    }
+    return () => clearTimeout(timer);
+  }, [resendCountdown]);
+
+  const handleResendCode = async () => {
+    if (!code) return;
+    if (resendEnabled) {
+      try {
+        await resendEmailOtpVerify({ email: code });
+        Toast.show({
+          type: "success",
+          text1: "We’ve sent you 4-digit code to your Mail",
+          position: "top",
+        });
+        setResendCountdown(90);
+        setResendEnabled(false);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      console.log("Sending");
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -69,8 +121,8 @@ const VerifyEmailCodeScreen = () => {
               <CodeField
                 ref={ref}
                 {...props}
-                value={values.otp_code}
-                onChangeText={(code) => setFieldValue("otp_code", code)}
+                value={values.otp}
+                onChangeText={(code) => setFieldValue("otp", code)}
                 cellCount={CELL_COUNT}
                 rootStyle={styles.codeFiledRoot}
                 keyboardType="number-pad"
@@ -91,16 +143,20 @@ const VerifyEmailCodeScreen = () => {
             title="Verify"
             containerStyles="bg-primary my-8 w-full py-4"
             titleStyle="text-base font-medium text-black"
-            isLoading={isSubmitting}
+            isLoading={sending}
             handlePress={handleSubmit}
           />
           <View className="flex-row items-center justify-center space-x-1 py-3">
             <Text className="text-sm font-normal text-black">
               Didn’t receive any code?
             </Text>
-            <TouchableOpacity onPress={() => router.push("/login")}>
+            <TouchableOpacity onPress={handleResendCode}>
               <Text className="text-sm font-normal text-[#997A7A] underline">
-                Change verification method
+                {resendEnabled
+                  ? "Change verification method"
+                  : ` ${Math.floor(resendCountdown / 60)}:${String(
+                      resendCountdown % 60
+                    ).padStart(2, "0")}`}
               </Text>
             </TouchableOpacity>
           </View>

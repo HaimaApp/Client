@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomButton, FormField, Topheader } from "@/components";
@@ -10,39 +10,52 @@ import { authFormValueType } from "@/types";
 import Toast from "react-native-toast-message";
 import { MaterialIcons } from "@expo/vector-icons";
 import useFirstStore from "@/store";
+import { loginUser } from "@/lib/apis/auth";
+import { getErrorMessage } from "@/hooks";
 
 const LoginScreen = () => {
   const { setIsAppFirstLaunched } = useFirstStore();
+  const [sending, setSending] = useState(false);
+
   const initialValues: authFormValueType = {
     email: "",
     password: "",
   };
 
-  const onSubmit = (payload: authFormValueType, action: any) => {
-    console.log(payload);
-    Toast.show({
-      type: "success",
-      text1: "We’ve sent you 4-digit code to your Mail",
-      position: "bottom",
-    });
-    router.replace(`/home`);
-    setIsAppFirstLaunched(true);
-    action.resetForm();
+  const onSubmit = async (payload: authFormValueType, action: any) => {
+    try {
+      setSending(true);
+      const response = await loginUser(payload);
+      Toast.show({
+        type: "success",
+        text1: "Logged in Successfully",
+        position: "top",
+      });
+      router.replace(`/home`);
+      setIsAppFirstLaunched(true);
+      action.resetForm();
+      setSending(false);
+      console.log(response);
+      return response;
+    } catch (error: any) {
+      console.log(error);
+      const errorMessage = getErrorMessage(error, "Log in Error");
+      Toast.show({
+        type: "error",
+        text1: errorMessage,
+        position: "top",
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
-  const {
-    values,
-    handleChange,
-    handleBlur,
-    errors,
-    touched,
-    isSubmitting,
-    handleSubmit,
-  } = useFormik({
-    initialValues,
-    validationSchema: authFormSchema,
-    onSubmit,
-  });
+  const { values, handleChange, handleBlur, errors, touched, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema: authFormSchema,
+      onSubmit,
+    });
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -68,7 +81,7 @@ const LoginScreen = () => {
                   touched.email && errors.email ? "!border-red-500" : ""
                 } pl-[45px]`}
               />
-              <View className="flex-row items-center justify-start space-x-2 absolute top-[68%] left-[6%]">
+              <View className="flex-row items-center justify-start space-x-2 absolute top-[68%] left-[16px]">
                 <Image source={icons.mailIcon} resizeMode="contain" />
               </View>
             </View>
@@ -96,7 +109,7 @@ const LoginScreen = () => {
                   touched.password && errors.password ? "!border-red-500" : ""
                 } pl-[45px]`}
               />
-              <View className="flex-row items-center justify-start space-x-2 absolute top-[68%] left-[6%]">
+              <View className="flex-row items-center justify-start space-x-2 absolute top-[68%] left-[16px]">
                 <Image source={icons.lockIcon} resizeMode="contain" />
               </View>
             </View>
@@ -120,7 +133,7 @@ const LoginScreen = () => {
               title="Login"
               containerStyles="bg-primary mt-3 w-full py-3"
               titleStyle="text-base font-medium text-black"
-              isLoading={isSubmitting}
+              isLoading={sending}
               handlePress={handleSubmit}
             />
             <View className="py-3 w-full flex-row items-center justify-center">
@@ -141,8 +154,6 @@ const LoginScreen = () => {
               }
               containerStyles="w-full py-3 mt-3 border border-primary"
               titleStyle="text-base font-medium text-black"
-              isLoading={isSubmitting}
-              handlePress={handleSubmit}
             />
             <CustomButton
               title={
@@ -153,14 +164,12 @@ const LoginScreen = () => {
                     resizeMode="contain"
                   />
                   <Text className="text-base font-medium text-white">
-                    Sign in with Google
+                    Sign in with Apple
                   </Text>
                 </View>
               }
               containerStyles="w-full py-3 mt-3 bg-black border border-black"
               titleStyle="text-base font-medium text-black"
-              isLoading={isSubmitting}
-              handlePress={handleSubmit}
             />
             <View className="flex-row items-center justify-center space-x-1 py-4 w-full">
               <Text className="text-sm font-normal text-black">New here?</Text>

@@ -13,14 +13,14 @@ export interface authFormValueType {
 }
 
 export interface otpFormValueType {
-  otp_code: string;
+  otp: string;
 }
 
 export interface personalFormValueType {
   first_name: string;
   last_name: string;
   username: string;
-  mobile_number: string;
+  mobile_no: string;
   email: string;
   location: string;
 }
@@ -30,8 +30,9 @@ export interface forgetFormValueType {
 }
 
 export interface resetFormValueType {
-  password: string;
+  password?: string;
   confirm_password?: string;
+  email?: string;
 }
 
 export interface creditCardFormValueType {

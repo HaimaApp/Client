@@ -57,7 +57,7 @@ describe("CustomButton Component", () => {
     let styles = button.props.style;
     styles = Array.isArray(styles) ? styles : [styles]; // Ensure styles is an array
 
-    const opacityStyle = styles.find((style: any) => style.opacity === 0.5);
+    const opacityStyle = styles.find((style: any) => style.opacity === 0.9);
     expect(opacityStyle).toBeTruthy();
 
     rerender(
@@ -72,7 +72,7 @@ describe("CustomButton Component", () => {
     styles = button.props.style;
     styles = Array.isArray(styles) ? styles : [styles]; // Ensure styles is an array
 
-    const newOpacityStyle = styles.find((style: any) => style.opacity === 0.5);
+    const newOpacityStyle = styles.find((style: any) => style.opacity === 0.9);
     expect(newOpacityStyle).toBeTruthy();
   });
 

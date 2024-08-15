@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomButton, FormField, Topheader } from "@/components";
@@ -9,36 +9,47 @@ import { router } from "expo-router";
 import { forgetFormValueType } from "@/types";
 import Toast from "react-native-toast-message";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import { getErrorMessage } from "@/hooks";
+import { forgetPassword } from "@/lib/apis/auth";
 
 const ForgetPasswordScreen = () => {
+  const [sending, setSending] = useState(false);
+
   const initialValues: forgetFormValueType = {
     email: "",
   };
 
-  const onSubmit = (payload: forgetFormValueType, action: any) => {
-    console.log(payload);
-    Toast.show({
-      type: "success",
-      text1: "We’ve sent you 4-digit code to your Mail",
-      position: "bottom",
-    });
-    router.push(`/resetpassword/otpcode/${payload.email}`);
-    action.resetForm();
+  const onSubmit = async (payload: forgetFormValueType, action: any) => {
+    try {
+      setSending(true);
+      const response = await forgetPassword(payload);
+      router.push(`/resetpassword/otpcode/${payload.email}`);
+      Toast.show({
+        type: "success",
+        text1: "We’ve sent you 4-digit code to your Mail",
+        position: "bottom",
+      });
+      action.resetForm();
+      setSending(false);
+      return response;
+    } catch (error: any) {
+      const errorMessage = getErrorMessage(error, "Forget Password Error");
+      Toast.show({
+        type: "error",
+        text1: errorMessage,
+        position: "top",
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
-  const {
-    values,
-    handleChange,
-    handleBlur,
-    errors,
-    touched,
-    isSubmitting,
-    handleSubmit,
-  } = useFormik({
-    initialValues,
-    validationSchema: forgetSchema,
-    onSubmit,
-  });
+  const { values, handleChange, handleBlur, errors, touched, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema: forgetSchema,
+      onSubmit,
+    });
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -76,7 +87,7 @@ const ForgetPasswordScreen = () => {
                   touched.email && errors.email ? "!border-red-500" : ""
                 } pl-[45px]`}
               />
-              <View className="flex-row items-center justify-start space-x-2 absolute top-[66%] left-[6%]">
+              <View className="flex-row items-center justify-start space-x-2 absolute top-[66%] left-[16px]">
                 <Image source={icons.mailIcon} resizeMode="contain" />
               </View>
             </View>
@@ -91,7 +102,7 @@ const ForgetPasswordScreen = () => {
               title="Reset password"
               containerStyles="bg-primary my-8 w-full py-4"
               titleStyle="text-base font-medium text-black"
-              isLoading={isSubmitting}
+              isLoading={sending}
               handlePress={handleSubmit}
             />
           </View>

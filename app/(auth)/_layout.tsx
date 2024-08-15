@@ -16,9 +16,13 @@ const AuthLayout = () => {
           name="profiledetail/success"
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="resetpassword" options={{ headerShown: false }} />
+
         <Stack.Screen
           name="resetpassword/otpcode/[otp]"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="resetpassword/[email]/reset"
           options={{ headerShown: false }}
         />
         <Stack.Screen
