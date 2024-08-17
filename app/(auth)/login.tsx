@@ -23,32 +23,36 @@ const LoginScreen = () => {
   };
 
   const onSubmit = async (payload: authFormValueType, action: any) => {
-    try {
-      setSending(true);
-      const response = await loginUser(payload);
-      Toast.show({
-        type: "success",
-        text1: "Logged in Successfully",
-        position: "top",
-      });
-      router.replace(`/home`);
-      setIsAppFirstLaunched(true);
-      action.resetForm();
-      setSending(false);
-      console.log(response);
-      return response;
-    } catch (error: any) {
-      console.log(error);
-      const errorMessage = getErrorMessage(error, "Log in Error");
-      Toast.show({
-        type: "error",
-        text1: errorMessage,
-        position: "top",
-      });
-    } finally {
-      setSending(false);
-    }
+    router.replace(`/home`);
+    setIsAppFirstLaunched(true);
   };
+  // const onSubmit = async (payload: authFormValueType, action: any) => {
+  //   try {
+  //     setSending(true);
+  //     const response = await loginUser(payload);
+  //     Toast.show({
+  //       type: "success",
+  //       text1: "Logged in Successfully",
+  //       position: "top",
+  //     });
+  //     router.replace(`/home`);
+  //     setIsAppFirstLaunched(true);
+  //     action.resetForm();
+  //     setSending(false);
+  //     console.log(response);
+  //     return response;
+  //   } catch (error: any) {
+  //     console.log(error);
+  //     const errorMessage = getErrorMessage(error, "Log in Error");
+  //     Toast.show({
+  //       type: "error",
+  //       text1: errorMessage,
+  //       position: "top",
+  //     });
+  //   } finally {
+  //     setSending(false);
+  //   }
+  // };
 
   const { values, handleChange, handleBlur, errors, touched, handleSubmit } =
     useFormik({

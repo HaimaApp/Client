@@ -5,8 +5,9 @@ import {
   ScrollView,
   FlatList,
   Platform,
+  RefreshControl,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 import { shopCategory, shopData } from "@/constants/data";
@@ -14,10 +15,26 @@ import { NavHeader, ProductItem } from "@/components";
 
 const HomeScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 3000);
+  }, []);
 
   return (
-    <SafeAreaView className="bg-white flex-1 pt-10">
-      <ScrollView contentContainerStyle={{ paddingBottom: Platform.OS === "ios" ? 20 : 0 }}>
+    <SafeAreaView className="bg-white flex-1 pt-3">
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: Platform.OS === "ios" ? 20 : 0,
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <NavHeader />
         <View className="w-full pt-8 pb-4 pl-4 border-b border-[#F0F2F5]">
           <FlatList

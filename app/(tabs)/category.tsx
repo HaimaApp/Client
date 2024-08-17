@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
+  RefreshControl,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAvoidingView } from "react-native";
@@ -19,13 +20,21 @@ import { CustomButton } from "@/components";
 
 const CategoryScreen = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [tabData, setTabData] = useState<categoryItemType[]>(categoryItem);
+  const [tabData] = useState<categoryItemType[]>(categoryItem);
+  const [refreshing, setRefreshing] = useState(false);
 
   const filteredData = tabData
     ? (tabData as categoryItemType[]).filter((item) =>
         item.category.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : tabData;
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 3000);
+  };
 
   return (
     <SafeAreaView className="flex-1 pt-4 bg-white">
@@ -94,6 +103,12 @@ const CategoryScreen = () => {
                     />
                   </View>
                 )}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
               />
             </View>
           </View>

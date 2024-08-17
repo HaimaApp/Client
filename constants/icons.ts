@@ -27,7 +27,6 @@ const messageIcon = require("@/assets/icons/messageIcon.png");
 const successUploadIcon = require("@/assets/icons/successUploadIcon.png");
 const errorUploadIcon = require("@/assets/icons/errorUploadIcon.png");
 const noMessageIcon = require("@/assets/icons/noMessageIcon.png");
-const uploadClickIcon = require("@/assets/icons/uploadClickIcon.png");
 const uploadingImageIcon = require("@/assets/icons/uploadingImageIcon.png");
 const trashIcon = require("@/assets/icons/trashIcon.png");
 const retryIcon = require("@/assets/icons/retryIcon.png");
@@ -66,7 +65,6 @@ export default {
   successUploadIcon,
   errorUploadIcon,
   noMessageIcon,
-  uploadClickIcon,
   uploadingImageIcon,
   trashIcon,
   retryIcon,

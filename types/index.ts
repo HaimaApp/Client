@@ -71,6 +71,8 @@ export interface sellItemFormType {
   item_name: string;
   item_description: string;
   brand: string;
+  category: string;
+  color: string;
   condition: string;
   price: string;
 }

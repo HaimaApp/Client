@@ -1,21 +1,21 @@
 export const onBoardingSlides = [
   {
     id: "1",
-    image: require("@/assets/images/onboardingImage.png"),
+    image: require("@/assets/icon.jpg"),
     title: "Welcome to a safe and secure market space for Muslim women!",
     subtitle:
       "Find your perfect fit: Explore a diverse range of modest clothing, accessories, beauty, and lifestyle essentials.",
   },
   {
     id: "2",
-    image: require("@/assets/images/onboardingImage.png"),
+    image: require("@/assets/icon.jpg"),
     title: "Shop Your Values, Embrace Your Style",
     subtitle:
       "Discover unique products from Muslim women you can proudly support and shop from",
   },
   {
     id: "3",
-    image: require("@/assets/images/onboardingImage.png"),
+    image: require("@/assets/icon.jpg"),
     title: "Verified Connections, Authentic Voice",
     subtitle:
       "Multi-layered security: Only verified women are welcomed, creating a trusted and supportive community.",
@@ -314,5 +314,309 @@ export const messagesData = [
     receiver: "Customer",
     content: "https://via.placeholder.com/150",
     is_read: false,
+  },
+];
+
+
+export const categoriesOptionsData = [
+  {
+    category: "Men",
+    subCategories: [
+      {
+        name: "Modest wear",
+        items: [
+          "Jilbaab 1-piece",
+          "Jilbaab 2-piece",
+          "Khimar",
+          "Abaya",
+          "Hijab",
+          "Niqab",
+          "Burkini",
+        ],
+      },
+      {
+        name: "Tops",
+        items: [
+          "T-shirts",
+          "Hoodies",
+          "Jumpers",
+          "Cardigans",
+          "Blouses",
+          "Shirts",
+        ],
+      },
+      {
+        name: "Bottoms",
+        items: ["Jeans", "Jogging bottoms", "Trousers", "Skirts"],
+      },
+      {
+        name: "Dresses",
+        items: ["Fancy dress", "Dress", "Jumpsuit", "Other"],
+      },
+      {
+        name: "Coats and jackets",
+        items: ["Waistcoat", "Blazer", "Coat and jacket", "Other"],
+      },
+      {
+        name: "Footwear",
+        items: [
+          "Trainers",
+          "Sliders",
+          "Sandals",
+          "Slippers",
+          "Loafers",
+          "Boots",
+          "Mules",
+          "Heels",
+          "Other",
+        ],
+      },
+      {
+        name: "Accessories",
+        items: [
+          "Bags",
+          "Belts",
+          "Hats",
+          "Caps",
+          "Gloves",
+          "Scarves",
+          "Sunglasses",
+          "Purses",
+          "Watch",
+          "Jewellery",
+          "Hair accessories",
+          "Other",
+        ],
+      },
+      {
+        name: "Nightwear",
+        items: ["Pyjamas", "Robes", "Other"],
+      },
+    ],
+  },
+  {
+    category: "Women",
+    subCategories: [
+      {
+        name: "Modest wear",
+        items: [
+          "Jilbaab 1-piece",
+          "Jilbaab 2-piece",
+          "Khimar",
+          "Abaya",
+          "Hijab",
+          "Niqab",
+          "Burkini",
+        ],
+      },
+      {
+        name: "Tops",
+        items: [
+          "T-shirts",
+          "Hoodies",
+          "Jumpers",
+          "Cardigans",
+          "Blouses",
+          "Shirts",
+        ],
+      },
+      {
+        name: "Bottoms",
+        items: ["Jeans", "Jogging bottoms", "Trousers", "Skirts"],
+      },
+      {
+        name: "Dresses",
+        items: ["Fancy dress", "Dress", "Jumpsuit", "Other"],
+      },
+      {
+        name: "Coats and jackets",
+        items: ["Waistcoat", "Blazer", "Coat and jacket", "Other"],
+      },
+      {
+        name: "Footwear",
+        items: [
+          "Trainers",
+          "Sliders",
+          "Sandals",
+          "Slippers",
+          "Loafers",
+          "Boots",
+          "Mules",
+          "Heels",
+          "Other",
+        ],
+      },
+      {
+        name: "Accessories",
+        items: [
+          "Bags",
+          "Belts",
+          "Hats",
+          "Caps",
+          "Gloves",
+          "Scarves",
+          "Sunglasses",
+          "Purses",
+          "Watch",
+          "Jewellery",
+          "Hair accessories",
+          "Other",
+        ],
+      },
+      {
+        name: "Nightwear",
+        items: ["Pyjamas", "Robes", "Other"],
+      },
+    ],
+  },
+  {
+    category: "Kids",
+    subCategories: [
+      {
+        name: "Modest wear",
+        items: [
+          "Jilbaab 1-piece",
+          "Jilbaab 2-piece",
+          "Khimar",
+          "Abaya",
+          "Hijab",
+          "Niqab",
+          "Burkini",
+        ],
+      },
+      {
+        name: "Tops",
+        items: [
+          "T-shirts",
+          "Hoodies",
+          "Jumpers",
+          "Cardigans",
+          "Blouses",
+          "Shirts",
+        ],
+      },
+      {
+        name: "Bottoms",
+        items: ["Jeans", "Jogging bottoms", "Trousers", "Skirts"],
+      },
+      {
+        name: "Dresses",
+        items: ["Fancy dress", "Dress", "Jumpsuit", "Other"],
+      },
+      {
+        name: "Coats and jackets",
+        items: ["Waistcoat", "Blazer", "Coat and jacket", "Other"],
+      },
+      {
+        name: "Footwear",
+        items: [
+          "Trainers",
+          "Sliders",
+          "Sandals",
+          "Slippers",
+          "Loafers",
+          "Boots",
+          "Mules",
+          "Heels",
+          "Other",
+        ],
+      },
+      {
+        name: "Accessories",
+        items: [
+          "Bags",
+          "Belts",
+          "Hats",
+          "Caps",
+          "Gloves",
+          "Scarves",
+          "Sunglasses",
+          "Purses",
+          "Watch",
+          "Jewellery",
+          "Hair accessories",
+          "Other",
+        ],
+      },
+      {
+        name: "Nightwear",
+        items: ["Pyjamas", "Robes", "Other"],
+      },
+    ],
+  },
+  {
+    category: "Everything else",
+    subCategories: [
+      {
+        name: "Modest wear",
+        items: [
+          "Jilbaab 1-piece",
+          "Jilbaab 2-piece",
+          "Khimar",
+          "Abaya",
+          "Hijab",
+          "Niqab",
+          "Burkini",
+        ],
+      },
+      {
+        name: "Tops",
+        items: [
+          "T-shirts",
+          "Hoodies",
+          "Jumpers",
+          "Cardigans",
+          "Blouses",
+          "Shirts",
+        ],
+      },
+      {
+        name: "Bottoms",
+        items: ["Jeans", "Jogging bottoms", "Trousers", "Skirts"],
+      },
+      {
+        name: "Dresses",
+        items: ["Fancy dress", "Dress", "Jumpsuit", "Other"],
+      },
+      {
+        name: "Coats and jackets",
+        items: ["Waistcoat", "Blazer", "Coat and jacket", "Other"],
+      },
+      {
+        name: "Footwear",
+        items: [
+          "Trainers",
+          "Sliders",
+          "Sandals",
+          "Slippers",
+          "Loafers",
+          "Boots",
+          "Mules",
+          "Heels",
+          "Other",
+        ],
+      },
+      {
+        name: "Accessories",
+        items: [
+          "Bags",
+          "Belts",
+          "Hats",
+          "Caps",
+          "Gloves",
+          "Scarves",
+          "Sunglasses",
+          "Purses",
+          "Watch",
+          "Jewellery",
+          "Hair accessories",
+          "Other",
+        ],
+      },
+      {
+        name: "Nightwear",
+        items: ["Pyjamas", "Robes", "Other"],
+      },
+    ],
   },
 ];
