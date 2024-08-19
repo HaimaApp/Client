@@ -122,6 +122,7 @@ const BrandBottomSheet: React.FC<BrandBottomSheetProps> = ({
             <TouchableOpacity
               onPress={() => bottomSheetModalRef.current?.close()}
               className="flex-row items-center justify-start space-x-3 absolute top-1 left-4"
+              testID="close-button"
             >
               <MaterialIcons name="close" size={24} color="#4b5563" />
             </TouchableOpacity>
