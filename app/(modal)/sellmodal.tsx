@@ -19,13 +19,23 @@ import { useFormik } from "formik";
 import { ImageType, sellItemFormType } from "@/types";
 import { sellFormSchema } from "@/schema";
 import { CustomButton, FormField } from "@/components";
-import { CategoryBottomSheet } from "@/components/ui/BottomSheetComponent";
+import {
+  BrandBottomSheet,
+  CategoryBottomSheet,
+  ColorBottomSheet,
+  ConditionBottomSheet,
+  PriceBottomSheet,
+} from "@/components/ui/BottomSheetComponent";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 
 const SellModalScreen = () => {
   const [remainingWords, setRemainingWords] = useState(1000);
   const [successUploadingModal, setSuccessUploadingModal] = useState(false);
   const categortBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+  const brandBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+  const conditionBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+  const colorBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+  const priceBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
   const flatListRef = useRef<FlatList>(null);
 
   const initialValues: sellItemFormType = {
@@ -35,7 +45,7 @@ const SellModalScreen = () => {
     category: "",
     brand: "",
     condition: "",
-    color: "",
+    color: [],
     price: "",
   };
 
@@ -278,65 +288,144 @@ const SellModalScreen = () => {
                     <Text className="text-lg font-semibold text-black">
                       Info
                     </Text>
-                    <View className="w-full flex-row items-center justify-between border-b border-black/20 pb-3">
-                      <Text className="text-base font-medium text-black">
-                        Category
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() =>
-                          categortBottomSheetModalRef.current?.present()
-                        }
-                        className="flex-row items-center justify-end space-x-2"
+                    <View className="w-full">
+                      <View
+                        className={`w-full flex-row items-center justify-between border-b pb-3 ${
+                          touched.category && errors.category
+                            ? "!border-red-500"
+                            : "border-black/20"
+                        }`}
                       >
-                        <Text className="text-sm font-medium text-gray-600">
-                          {values.category === "" ? "Select" : values.category}
+                        <Text className="text-base font-medium text-black">
+                          Category
                         </Text>
-                        <Feather
-                          name="chevron-right"
-                          size={24}
-                          color="#4b5563"
-                        />
-                      </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() =>
+                            categortBottomSheetModalRef.current?.present()
+                          }
+                          className="flex-row items-center justify-end space-x-2"
+                        >
+                          <Text className="text-sm font-medium text-gray-600">
+                            {values.category === ""
+                              ? "Select"
+                              : values.category}
+                          </Text>
+                          <Feather
+                            name="chevron-right"
+                            size={24}
+                            color="#4b5563"
+                          />
+                        </TouchableOpacity>
+                      </View>
+
+                      {touched.category && errors.category ? (
+                        <View className="flex-row items-center space-x-2 mt-2">
+                          <MaterialIcons
+                            name="error-outline"
+                            size={16}
+                            color="red"
+                          />
+                          <Text style={{ color: "red" }}>
+                            {errors.category}
+                          </Text>
+                        </View>
+                      ) : null}
                     </View>
-                    <View className="w-full flex-row items-center justify-between border-b border-black/20 pb-3">
-                      <Text className="text-base font-medium text-black">
-                        Brand
-                      </Text>
-                      <TouchableOpacity className="flex-row items-center justify-end space-x-2">
-                        <Text className="text-sm font-medium text-gray-600">
-                          {values.brand === "" ? "Select" : values.brand}
+                    <View className="w-full">
+                      <View
+                        className={`w-full flex-row items-center justify-between border-b pb-3 ${
+                          touched.brand && errors.brand
+                            ? "!border-red-500"
+                            : "border-black/20"
+                        }`}
+                      >
+                        <Text className="text-base font-medium text-black">
+                          Brand
                         </Text>
-                        <Feather
-                          name="chevron-right"
-                          size={24}
-                          color="#4b5563"
-                        />
-                      </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() =>
+                            brandBottomSheetModalRef.current?.present()
+                          }
+                          className="flex-row items-center justify-end space-x-2"
+                        >
+                          <Text className="text-sm font-medium text-gray-600">
+                            {values.brand === "" ? "Select" : values.brand}
+                          </Text>
+                          <Feather
+                            name="chevron-right"
+                            size={24}
+                            color="#4b5563"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      {touched.brand && errors.brand ? (
+                        <View className="flex-row items-center space-x-2 mt-2">
+                          <MaterialIcons
+                            name="error-outline"
+                            size={16}
+                            color="red"
+                          />
+                          <Text style={{ color: "red" }}>{errors.brand}</Text>
+                        </View>
+                      ) : null}
                     </View>
-                    <View className="w-full flex-row items-center justify-between border-b border-black/20 pb-3">
-                      <Text className="text-base font-medium text-black">
-                        Condition
-                      </Text>
-                      <TouchableOpacity className="flex-row items-center justify-end space-x-2">
-                        <Text className="text-sm font-medium text-gray-600">
-                          {values.condition === ""
-                            ? "Select"
-                            : values.condition}
+                    <View className="w-full">
+                      <View
+                        className={`w-full flex-row items-center justify-between border-b pb-3 ${
+                          touched.condition && errors.condition
+                            ? "!border-red-500"
+                            : "border-black/20"
+                        }`}
+                      >
+                        <Text className="text-base font-medium text-black">
+                          Condition
                         </Text>
-                        <Feather
-                          name="chevron-right"
-                          size={24}
-                          color="#4b5563"
-                        />
-                      </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() =>
+                            conditionBottomSheetModalRef.current?.present()
+                          }
+                          className="flex-row items-center justify-end space-x-2"
+                        >
+                          <Text className="text-sm font-medium text-gray-600">
+                            {values.condition === ""
+                              ? "Select"
+                              : values.condition}
+                          </Text>
+                          <Feather
+                            name="chevron-right"
+                            size={24}
+                            color="#4b5563"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      {touched.condition && errors.condition ? (
+                        <View className="flex-row items-center space-x-2 mt-2">
+                          <MaterialIcons
+                            name="error-outline"
+                            size={16}
+                            color="red"
+                          />
+                          <Text style={{ color: "red" }}>
+                            {errors.condition}
+                          </Text>
+                        </View>
+                      ) : null}
                     </View>
+
                     <View className="w-full flex-row items-center justify-between border-b border-black/20 pb-3">
                       <Text className="text-base font-medium text-black">
                         Color
                       </Text>
-                      <TouchableOpacity className="flex-row items-center justify-end space-x-2">
+                      <TouchableOpacity
+                        onPress={() =>
+                          colorBottomSheetModalRef.current?.present()
+                        }
+                        className="flex-row items-center justify-end space-x-2"
+                      >
                         <Text className="text-sm font-medium text-gray-600">
-                          {values.color === "" ? "Select" : values.color}
+                          {values.color.length === 0
+                            ? "Select"
+                            : values.color.join(", ")}
                         </Text>
                         <Feather
                           name="chevron-right"
@@ -345,20 +434,46 @@ const SellModalScreen = () => {
                         />
                       </TouchableOpacity>
                     </View>
-                    <View className="w-full flex-row items-center justify-between border-b border-black/20 pb-3">
-                      <Text className="text-base font-medium text-black">
-                        Price
-                      </Text>
-                      <TouchableOpacity className="flex-row items-center justify-end space-x-2">
-                        <Text className="text-sm font-medium text-gray-600">
-                          {values.price === "" ? "Select" : values.price}
+
+                    <View className="w-full">
+                      <View
+                        className={`w-full flex-row items-center justify-between border-b pb-3 ${
+                          touched.condition && errors.condition
+                            ? "!border-red-500"
+                            : "border-black/20"
+                        }`}
+                      >
+                        <Text className="text-base font-medium text-black">
+                          Price
                         </Text>
-                        <Feather
-                          name="chevron-right"
-                          size={24}
-                          color="#4b5563"
-                        />
-                      </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() =>
+                            priceBottomSheetModalRef.current?.present()
+                          }
+                          className="flex-row items-center justify-end space-x-2"
+                        >
+                          <Text className="text-sm font-medium text-gray-600">
+                            {values.price === ""
+                              ? "Select"
+                              : `£ ${values.price}`}
+                          </Text>
+                          <Feather
+                            name="chevron-right"
+                            size={24}
+                            color="#4b5563"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      {touched.price && errors.price ? (
+                        <View className="flex-row items-center space-x-2 mt-2">
+                          <MaterialIcons
+                            name="error-outline"
+                            size={16}
+                            color="red"
+                          />
+                          <Text style={{ color: "red" }}>{errors.price}</Text>
+                        </View>
+                      ) : null}
                     </View>
                   </View>
                 </View>
@@ -369,7 +484,7 @@ const SellModalScreen = () => {
             <View className="w-2/4">
               <CustomButton
                 handlePress={() => handleSubmit()}
-                title="Upload"
+                title="Save to drafts"
                 containerStyles="bg-white border border-dark !min-h-[48px]"
                 titleStyle="text-dark font-medium text-base"
                 disabled={isSubmitting}
@@ -391,6 +506,25 @@ const SellModalScreen = () => {
         bottomSheetModalRef={categortBottomSheetModalRef}
         setFieldValue={setFieldValue}
         value={values.category}
+      />
+      <BrandBottomSheet
+        bottomSheetModalRef={brandBottomSheetModalRef}
+        setFieldValue={setFieldValue}
+      />
+      <ConditionBottomSheet
+        bottomSheetModalRef={conditionBottomSheetModalRef}
+        setFieldValue={setFieldValue}
+        value={values.condition}
+      />
+      <ColorBottomSheet
+        bottomSheetModalRef={colorBottomSheetModalRef}
+        setFieldValue={setFieldValue}
+        value={values.color}
+      />
+      <PriceBottomSheet
+        bottomSheetModalRef={priceBottomSheetModalRef}
+        setFieldValue={setFieldValue}
+        value={values.price}
       />
       {successUploadingModal && (
         <View

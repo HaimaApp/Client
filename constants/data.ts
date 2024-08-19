@@ -317,7 +317,6 @@ export const messagesData = [
   },
 ];
 
-
 export const categoriesOptionsData = [
   {
     category: "Men",
@@ -619,4 +618,81 @@ export const categoriesOptionsData = [
       },
     ],
   },
+];
+
+export const brandDataOption = [
+  {
+    id: "01212Brand_new",
+    text: "Brand new",
+    desc: "Unused with original packaging or tags",
+  },
+  {
+    id: "01212like_new",
+    text: "Like new ",
+    desc: "Mint condition pre-owned or new without tags",
+  },
+  {
+    id: "01212used_excellent",
+    text: "Used - excellent",
+    desc: "Lightly used but no noticeable flaws",
+  },
+  {
+    id: "01212used_good",
+    text: "Used - good ",
+    desc: "Minor flaws or sign of wear, to be noted in the description or photo",
+  },
+  {
+    id: "01212used_fair",
+    text: "Used - fair ",
+    desc: "Obvious flaws or sign of wear, to be noted in the description or photo",
+  },
+];
+
+export const conditionDataOption = [
+  {
+    id: "01212Brand_new",
+    text: "Brand new",
+    desc: "Unused with original packaging or tags",
+  },
+  {
+    id: "01212like_new",
+    text: "Like new ",
+    desc: "Mint condition pre-owned or new without tags",
+  },
+  {
+    id: "01212used_excellent",
+    text: "Used - excellent",
+    desc: "Lightly used but no noticeable flaws",
+  },
+  {
+    id: "01212used_good",
+    text: "Used - good ",
+    desc: "Minor flaws or sign of wear, to be noted in the description or photo",
+  },
+  {
+    id: "01212used_fair",
+    text: "Used - fair ",
+    desc: "Obvious flaws or sign of wear, to be noted in the description or photo",
+  },
+];
+
+export const colorsOption = [
+  { id: "black00121012", text: "Black", color: "#000000" },
+  { id: "grey00121013", text: "Grey", color: "#808080" },
+  { id: "white00121014", text: "White", color: "#FFFFFF" },
+  { id: "brown00121015", text: "Brown", color: "#A52A2A" },
+  { id: "tin00121016", text: "Tin", color: "#D2B48C" },
+  { id: "cream00121017", text: "Cream", color: "#FFFDD0" },
+  { id: "yellow00121018", text: "Yellow", color: "#FFFF00" },
+  { id: "red00121019", text: "Red", color: "#FF0000" },
+  { id: "burgury00121020", text: "Burgundy", color: "#800020" },
+  { id: "orange00121021", text: "Orange", color: "#FFA500" },
+  { id: "pink00121022", text: "Pink", color: "#FFC0CB" },
+  { id: "purple00121023", text: "Purple", color: "#800080" },
+  { id: "blue00121024", text: "Blue", color: "#0000FF" },
+  { id: "navy00121025", text: "Navy", color: "#000080" },
+  { id: "green00121026", text: "Green", color: "#008000" },
+  { id: "17", text: "Multicolor", color: "multicolor" },
+  { id: "silver00121028", text: "Silver", color: "#C0C0C0" },
+  { id: "gold00121029", text: "Gold", color: "#FFD700" },
 ];

@@ -1,22 +1,15 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { categoriesOptionsData } from "@/constants/data";
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, Animated, Easing } from "react-native";
 import {
   BottomSheetBackdrop,
+  BottomSheetFlatList,
   BottomSheetModal,
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-
-interface CategoryType {
-  category: string;
-  subCategories: {
-    name: string;
-    items: string[];
-  }[];
-}
 
 interface CategoryBottomSheetProps {
   bottomSheetModalRef: React.RefObject<BottomSheetModalMethods>;
@@ -34,10 +27,31 @@ const CategoryBottomSheet: React.FC<CategoryBottomSheetProps> = ({
     null
   );
   const [viewSubCategories, setViewSubCategories] = useState(false);
+  const slideAnim = useRef(new Animated.Value(0)).current;
+
+  const animateSlideIn = () => {
+    Animated.timing(slideAnim, {
+      toValue: 1,
+      duration: 300,
+      easing: Easing.out(Easing.ease),
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const animateSlideOut = () => {
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 300,
+      easing: Easing.out(Easing.ease),
+      useNativeDriver: true,
+    }).start();
+  };
 
   const handleCategoryPress = useCallback((category: string) => {
     setSelectedCategory(category);
     setViewSubCategories(true);
+    animateSlideIn();
+    bottomSheetModalRef.current?.expand();
   }, []);
 
   const handleSubCategoryPress = useCallback(
@@ -58,8 +72,12 @@ const CategoryBottomSheet: React.FC<CategoryBottomSheetProps> = ({
   };
 
   const handleBackPress = useCallback(() => {
-    setSelectedCategory(null);
-    setViewSubCategories(false);
+    animateSlideOut();
+    setTimeout(() => {
+      setSelectedCategory(null);
+      setViewSubCategories(false);
+      bottomSheetModalRef.current?.collapse();
+    }, 300);
   }, []);
 
   const renderCategoryItem = ({
@@ -72,11 +90,7 @@ const CategoryBottomSheet: React.FC<CategoryBottomSheetProps> = ({
       className="p-4 border-b border-[#ddd] flex-row items-center justify-between space-x-2"
     >
       <Text className="text-base">{item.category}</Text>
-      <Feather
-        name={value === item.category ? "check" : "chevron-right"}
-        size={24}
-        color="#4b5563"
-      />
+      <Feather name="chevron-right" size={24} color="#4b5563" />
     </TouchableOpacity>
   );
 
@@ -91,11 +105,7 @@ const CategoryBottomSheet: React.FC<CategoryBottomSheetProps> = ({
         className="p-4 border-b border-[#ddd] flex-row items-center justify-between space-x-2"
       >
         <Text className="text-lg font-bold">{item.name}</Text>
-        <Feather
-          name={value === item.name ? "check" : "chevron-right"}
-          size={24}
-          color="#4b5563"
-        />
+        <Feather name="chevron-right" size={24} color="#4b5563" />
       </TouchableOpacity>
 
       {selectedSubCategory === item.name &&
@@ -103,9 +113,12 @@ const CategoryBottomSheet: React.FC<CategoryBottomSheetProps> = ({
           <TouchableOpacity
             key={subItem}
             onPress={() => handleSubCategoryPress(subItem)}
-            className="p-4 border-b border-[#ddd]"
+            className="p-4 border-b border-[#ddd] flex-row items-center justify-between space-x-2"
           >
             <Text className="text-base">{subItem}</Text>
+            {value === subItem && (
+              <Feather name="check" size={24} color="#4b5563" />
+            )}
           </TouchableOpacity>
         ))}
     </View>
@@ -130,14 +143,27 @@ const CategoryBottomSheet: React.FC<CategoryBottomSheetProps> = ({
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        snapPoints={["90%"]}
+        snapPoints={["90%", "90%"]}
+        index={0}
         backdropComponent={renderBackdrop}
         enablePanDownToClose={false}
       >
         <BottomSheetView style={{ flex: 1 }}>
-          <View className="bg-white px-3 pb-32">
+          <View className="bg-white px-3 flex-1">
             {viewSubCategories ? (
-              <View>
+              <Animated.View
+                style={{
+                  transform: [
+                    {
+                      translateX: slideAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [1000, 0],
+                      }),
+                    },
+                  ],
+                  flex: 1,
+                }}
+              >
                 <View className="w-full flex-row items-center justify-center mb-5 relative">
                   <TouchableOpacity
                     onPress={handleBackPress}
@@ -150,33 +176,51 @@ const CategoryBottomSheet: React.FC<CategoryBottomSheetProps> = ({
                   </Text>
                 </View>
                 {selectedCategoryData && (
-                  <FlatList
+                  <BottomSheetFlatList
                     data={selectedCategoryData.subCategories}
                     keyExtractor={(item) => item.name}
                     renderItem={renderSubCategoryItem}
                     contentContainerStyle={{ flexGrow: 1 }}
                   />
                 )}
-              </View>
+              </Animated.View>
             ) : (
-              <View className="w-full">
-                <View className="w-full flex-row items-center justify-center mb-5 relative">
-                  <TouchableOpacity
-                    onPress={() => bottomSheetModalRef.current?.close()}
-                    className="flex-row items-center justify-start space-x-3 absolute top-1 left-0"
-                  >
-                    <MaterialIcons name="close" size={24} color="#4b5563" />
-                  </TouchableOpacity>
-                  <Text className="text-lg font-semibold text-black">
-                    Category
-                  </Text>
+              <Animated.View
+                style={{
+                  transform: [
+                    {
+                      translateX: slideAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, -1000],
+                      }),
+                    },
+                  ],
+                  opacity: slideAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 0],
+                  }),
+                  flex: 1,
+                }}
+              >
+                <View className="w-full flex-1">
+                  <View className="w-full flex-row items-center justify-center mb-5 relative">
+                    <TouchableOpacity
+                      onPress={() => bottomSheetModalRef.current?.close()}
+                      className="flex-row items-center justify-start space-x-3 absolute top-1 left-0"
+                    >
+                      <MaterialIcons name="close" size={24} color="#4b5563" />
+                    </TouchableOpacity>
+                    <Text className="text-lg font-semibold text-black">
+                      Category
+                    </Text>
+                  </View>
+                  <BottomSheetFlatList
+                    data={categoriesOptionsData}
+                    keyExtractor={(item) => item.category}
+                    renderItem={renderCategoryItem}
+                  />
                 </View>
-                <FlatList
-                  data={categoriesOptionsData}
-                  keyExtractor={(item) => item.category}
-                  renderItem={renderCategoryItem}
-                />
-              </View>
+              </Animated.View>
             )}
           </View>
         </BottomSheetView>
