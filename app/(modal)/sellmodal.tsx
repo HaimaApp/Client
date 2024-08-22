@@ -8,46 +8,50 @@ import {
   Platform,
   FlatList,
   Dimensions,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import {
-  Feather,
-  FontAwesome5,
-  Fontisto,
-  Ionicons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useFormik } from "formik";
 import { ImageType, sellItemFormType } from "@/types";
 import { sellFormSchema } from "@/schema";
 import { CustomButton, FormField } from "@/components";
-import { icons } from "@/constants";
+import {
+  BrandBottomSheet,
+  CategoryBottomSheet,
+  ColorBottomSheet,
+  ConditionBottomSheet,
+  PriceBottomSheet,
+} from "@/components/ui/BottomSheetComponent";
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 
 const SellModalScreen = () => {
-  const [images, setImages] = useState<ImageType[]>([]);
-  const [uploadProgress, setUploadProgress] = useState<{
-    [key: number]: number;
-  }>({});
-  const [uploading, setUploading] = useState<boolean>(false);
-  const [errorUploading, setErrorUploading] = useState(false);
+  const [remainingWords, setRemainingWords] = useState(1000);
   const [successUploadingModal, setSuccessUploadingModal] = useState(false);
+  const categortBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+  const brandBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+  const conditionBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+  const colorBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+  const priceBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+  const flatListRef = useRef<FlatList>(null);
 
   const initialValues: sellItemFormType = {
     images: [],
     item_name: "",
     item_description: "",
+    category: "",
     brand: "",
     condition: "",
+    color: [],
     price: "",
   };
 
-  const onSubmit = (payload: sellItemFormType, action: any) => {
+  const onSubmit = (payload: sellItemFormType) => {
     console.log(payload);
     setSuccessUploadingModal(true);
-    action.resetForm();
   };
 
   const {
@@ -73,74 +77,44 @@ const SellModalScreen = () => {
     });
 
     if (!result.canceled) {
-      setErrorUploading(false);
-      const selectedImages = result.assets.map((asset) => ({
+      const selectedImages = result.assets.map((asset, index) => ({
         uri: asset.uri,
-        name: asset.fileName || "unknown",
+        name: asset.fileName || `image_${index}`,
         type: asset.type || "image/jpeg",
       }));
-      setImages(selectedImages);
-      setFieldValue("images", selectedImages);
-      await uploadImages(selectedImages);
+
+      const uniqueImages = selectedImages.filter(
+        (asset) => !values.images.some((image) => image.name === asset.name)
+      );
+
+      if (uniqueImages.length === 0) {
+        Alert.alert("Duplicate Image", "This image is already selected.");
+      } else {
+        setFieldValue("images", [...values.images, ...uniqueImages]);
+        setTimeout(() => {
+          flatListRef.current?.scrollToEnd({ animated: true });
+        }, 100);
+      }
     }
-    if (result.canceled) {
-      setErrorUploading(true);
-    }
-  };
-
-  const uploadImages = async (
-    imagesToUpload: { uri: string; name: string; type: string }[]
-  ) => {
-    setUploading(true);
-    const uploadPromises = imagesToUpload.map((_, index) =>
-      simulateUpload(_, index)
-    );
-    await Promise.all(uploadPromises);
-    setUploading(false);
-  };
-
-  const simulateUpload = (_: any, index: number) => {
-    return new Promise<void>((resolve) => {
-      const totalTime = 3000; // 10 seconds
-      const intervalTime = 100;
-      let progress = 0;
-
-      const interval = setInterval(() => {
-        progress += (intervalTime / totalTime) * 100;
-        setUploadProgress((prev) => ({ ...prev, [index]: progress }));
-
-        if (progress >= 100) {
-          clearInterval(interval);
-          resolve();
-        }
-      }, intervalTime);
-    });
   };
 
   const removeImage = (index: number) => {
-    const filterImage = images.filter((_, i) => i !== index);
-    setImages(filterImage);
+    const filterImage = values.images.filter((_, i) => i !== index);
     setFieldValue("images", filterImage);
-    const newProgress = { ...uploadProgress };
-    delete newProgress[index];
-    setUploadProgress(newProgress);
   };
 
-  const clearImage = () => {
-    setImages([]);
-    setFieldValue("images", []);
+  const handleDescriptionChange = (text: string) => {
+    const words = text.length;
+    if (words <= 1000) {
+      setFieldValue("item_description", text);
+      setRemainingWords(1000 - words);
+    }
   };
 
-  const renderImage = ({
-    item,
-    index,
-  }: {
-    item: { uri: string; name: string; type: string };
-    index: number;
-  }) => (
+  const renderImage = ({ item, index }: { item: ImageType; index: number }) => (
     <View
       key={index}
-      className="w-[90px] h-[90px] border border-[#E6B8B8] rounded flex-row items-center justify-center space-y-2 relative px-4 mr-5"
+      className="w-[90px] h-[90px] border border-[#E6B8B8] rounded flex-row items-center justify-center space-y-2 relative px-4 mr-5 mt-2"
     >
       <View className="w-full h-full p-4 flex-row items-center justify-center">
         <Image
@@ -151,20 +125,12 @@ const SellModalScreen = () => {
       </View>
       <TouchableOpacity
         onPress={() => removeImage(index)}
-        className="absolute top-0 right-1"
+        className="absolute -top-5 -right-3"
       >
-        <Fontisto name="close" size={14} color="black" />
+        <Ionicons name="close-circle" size={24} color="black" />
       </TouchableOpacity>
     </View>
   );
-
-  const getOverallProgress = () => {
-    const totalProgress = Object.values(uploadProgress).reduce(
-      (acc, curr) => acc + curr,
-      0
-    );
-    return images.length > 0 ? totalProgress / images.length : 0;
-  };
 
   const screenHeight = Dimensions.get("window").height;
 
@@ -174,328 +140,398 @@ const SellModalScreen = () => {
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <ScrollView
-          contentContainerStyle={{
-            paddingVertical: 20,
-            flexGrow: 1,
-          }}
-        >
-          <View className="flex-col items-start justify-start space-y-6 w-full">
-            <TouchableOpacity
-              onPress={() => router.back()}
-              className="flex-row items-center justify-start space-x-2 px-5"
-            >
-              <Ionicons name="close" size={24} color="#ffcccc" />
-              <Text className="text-base font-medium text-primary">Close</Text>
-            </TouchableOpacity>
-            <Text className="text-3xl font-normal text-[#6B5656] border-b-2 border-[#F0F2F5] w-full pb-3  px-5">
-              Sell
+        <View style={{ flex: 1 }}>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="flex-row items-center justify-between space-x-2 border-b-2 border-[#F0F2F5] w-full py-3 px-5"
+          >
+            <Ionicons name="close" size={28} />
+            <Text className="text-2xl font-medium text-black w-[70%]">
+              Sell an item
             </Text>
-            <View className="w-full flex-col items-start justify-start space-y-4 px-5">
-              <View className="w-full flex-col items-start justify-start space-y-6">
-                <View
-                  className={`w-full border-[1.5px]  border-dashed ${
-                    images.length > 0 && !uploading
-                      ? "border-[#5FC381]"
-                      : uploading
-                      ? "border-primary bg-[#FBFEFC]"
-                      : errorUploading
-                      ? "border-[#CB1A14] bg-[#FEFBFB]"
-                      : "border-[#D0D5DD]"
-                  } h-[240px] flex-col items-center justify-center`}
-                >
-                  {images.length === 0 && !uploading && !errorUploading && (
-                    <View className="w-full h-full flex-col items-center justify-center space-y-3">
-                      <Image
-                        source={icons.uploadClickIcon}
-                        alt="upload icon"
-                        resizeMode="contain"
-                      />
-                      <Text className="text-sm font-semibold text-black">
-                        Click to upload
-                      </Text>
-                      <Text className="text-xs font-normal text-[#98A2B3]">
-                        You can add up to 20 item images
-                      </Text>
-                      <CustomButton
-                        handlePress={pickImages}
-                        title={
-                          <View className="flex-row items-end justify-center space-x-2">
-                            <Feather name="plus" size={20} color="black" />
-                            <Text className="text-sm text-black font-semibold">
-                              Upload images
-                            </Text>
-                          </View>
-                        }
-                        containerStyles="bg-primary px-3 mt-2"
-                      />
-                    </View>
-                  )}
-                  {uploading && (
-                    <View className="w-full h-full flex-col items-center justify-center space-y-3">
-                      <Image
-                        source={icons.uploadingImageIcon}
-                        alt="upload icon"
-                        resizeMode="contain"
-                      />
-                      <View className="w-[90%] h-2 rounded-full bg-[#fcd2c28a] overflow-hidden">
-                        <View
-                          style={{
-                            width: `${getOverallProgress()}%`,
-                          }}
-                          className="h-full bg-primary"
-                        />
-                      </View>
-                      <Text className="text-sm font-semibold text-black">
-                        Uploading Images
-                      </Text>
-                      <Text className="text-xs font-normal text-[#98A2B3]">
-                        {images.length} of items
-                      </Text>
-                    </View>
-                  )}
-                  {images.length > 0 && !uploading && (
-                    <View className="w-full h-full flex-col items-center justify-center space-y-3">
-                      <Image
-                        source={icons.successUploadIcon}
-                        alt="success upload icon"
-                        resizeMode="contain"
-                      />
-                      <Text className="text-sm font-semibold text-black">
-                        Image upload successful
-                      </Text>
-                      <Text className="text-xs font-normal text-[#98A2B3]">
-                        {images.length} of items
-                      </Text>
-                      <CustomButton
-                        handlePress={() => clearImage()}
-                        title={
-                          <View className="flex-row items-center justify-center space-x-2">
-                            <FontAwesome5
-                              name="trash-alt"
-                              size={16}
-                              color="black"
-                            />
-                            <Text className="text-sm text-black font-semibold">
-                              Clear Upload
-                            </Text>
-                          </View>
-                        }
-                        containerStyles="bg-white px-3 mt-2"
-                      />
-                    </View>
-                  )}
-                  {errorUploading && (
-                    <View className="w-full h-full flex-col items-center justify-center space-y-3">
-                      <Image
-                        source={icons.errorUploadIcon}
-                        alt="error upload icon"
-                        resizeMode="contain"
-                      />
-                      <Text className="text-sm font-semibold text-black">
-                        Uploading Images
-                      </Text>
-                      <Text className="text-xs font-normal text-[#98A2B3]">
-                        No Image selected
-                      </Text>
-                      <CustomButton
-                        handlePress={pickImages}
-                        title={
-                          <View className="flex-row items-center justify-center space-x-2">
-                            <Image
-                              source={icons.retryIcon}
-                              alt="retry icon"
-                              resizeMode="contain"
-                            />
-                            <Text className="text-sm text-black font-semibold">
-                              Try Again
-                            </Text>
-                          </View>
-                        }
-                        containerStyles="bg-white px-3 mt-2"
-                      />
-                    </View>
-                  )}
-                </View>
-                {images.length > 0 && !uploading && (
-                  <View className="w-full">
-                    <FlatList
-                      data={images}
-                      renderItem={renderImage}
-                      keyExtractor={(item) => item.uri}
-                      horizontal
+          </TouchableOpacity>
+          <ScrollView
+            contentContainerStyle={{
+              paddingVertical: 20,
+              flexGrow: 1,
+            }}
+          >
+            <View className="flex-col items-start justify-start space-y-6 w-full">
+              <View className="w-full flex-col items-start justify-start space-y-4 px-5">
+                <View className="w-full flex-col items-center justify-center pb-5 space-y-6">
+                  <Text className="text-xs font-normal text-[#98A2B3]">
+                    You can add up to 20 item images
+                  </Text>
+                  {values.images.length === 0 && (
+                    <CustomButton
+                      handlePress={pickImages}
+                      title={
+                        <View className="flex-row items-end justify-center space-x-2">
+                          <Feather name="plus" size={20} color="black" />
+                          <Text className="text-sm text-black font-semibold">
+                            Upload images
+                          </Text>
+                        </View>
+                      }
+                      containerStyles="bg-white border border-primary px-3 mt-6"
                     />
+                  )}
+                  {values.images.length > 0 && (
+                    <View className="w-full">
+                      <FlatList
+                        ref={flatListRef}
+                        data={[
+                          ...values.images,
+                          {
+                            uri: "add-more",
+                            name: "add-more",
+                            type: "add-more",
+                          },
+                        ]}
+                        renderItem={({ item, index }) =>
+                          item.uri === "add-more" ? (
+                            <TouchableOpacity
+                              onPress={pickImages}
+                              className="w-[90px] h-[90px] border border-primary rounded flex-row items-center justify-center space-y-2 relative px-4 mr-5 mt-2"
+                            >
+                              <Feather name="plus" size={24} color="black" />
+                            </TouchableOpacity>
+                          ) : (
+                            renderImage({ item, index })
+                          )
+                        }
+                        keyExtractor={(item) => item.uri}
+                        horizontal
+                      />
+                    </View>
+                  )}
+                </View>
+                <TouchableOpacity
+                  onPress={() => router.push("/(modal)/photoguildmodal")}
+                  className="w-full flex-row items-center justify-center"
+                >
+                  <Text className="text-base font-semibold text-primary underline">
+                    Read our photo tips
+                  </Text>
+                </TouchableOpacity>
+                <View className="w-full flex-col items-start">
+                  <Text className="text-sm font-medium text-black">
+                    Enter Item description to upload
+                  </Text>
+                  <View className="relative w-full">
+                    <FormField
+                      title={
+                        <Text className="text-sm font-medium text-black">
+                          Product name
+                        </Text>
+                      }
+                      titleShow={true}
+                      value={values.item_name}
+                      handleChangeText={handleChange("item_name")}
+                      onBlur={handleBlur("item_name")}
+                      otherStyles="mt-4"
+                      placeholder="Enter item name"
+                      errorClass={`${
+                        touched.item_name && errors.item_name
+                          ? "!border-red-500"
+                          : ""
+                      } px-4`}
+                    />
+                    {touched.item_name && errors.item_name ? (
+                      <View className="flex-row items-center space-x-2 mt-2">
+                        <MaterialIcons
+                          name="error-outline"
+                          size={16}
+                          color="red"
+                        />
+                        <Text style={{ color: "red" }}>{errors.item_name}</Text>
+                      </View>
+                    ) : null}
                   </View>
-                )}
-              </View>
-              <View className="w-full flex-col items-start">
-                <Text className="text-sm font-medium text-black">
-                  Enter Item description to upload
-                </Text>
-                <View className="relative w-full">
-                  <FormField
-                    title={
-                      <Text className="text-sm font-medium text-black">
-                        Item name
-                      </Text>
-                    }
-                    titleShow={true}
-                    value={values.item_name}
-                    handleChangeText={handleChange("item_name")}
-                    onBlur={handleBlur("item_name")}
-                    otherStyles="mt-4"
-                    placeholder="Enter item name"
-                    errorClass={`${
-                      touched.item_name && errors.item_name
-                        ? "!border-red-500"
-                        : ""
-                    } px-4`}
-                  />
-                  {touched.item_name && errors.item_name ? (
-                    <View className="flex-row items-center space-x-2 mt-2">
-                      <MaterialIcons
-                        name="error-outline"
-                        size={16}
-                        color="red"
-                      />
-                      <Text style={{ color: "red" }}>{errors.item_name}</Text>
-                    </View>
-                  ) : null}
-                </View>
-                <View className="relative w-full">
-                  <FormField
-                    title={
-                      <Text className="text-sm font-medium text-black">
-                        Item description
-                      </Text>
-                    }
-                    titleShow={true}
-                    value={values.item_description}
-                    handleChangeText={handleChange("item_description")}
-                    onBlur={handleBlur("item_description")}
-                    otherStyles="mt-2"
-                    placeholder="Enter item description here.."
-                    errorClass={`!h-[110px] ${
-                      touched.item_description && errors.item_description
-                        ? "!border-red-500"
-                        : ""
-                    } px-4 pt-4`}
-                    multiline={true}
-                    numberOfLines={4}
-                    style={{ textAlignVertical: "top" }}
-                  />
-                  {touched.item_description && errors.item_description ? (
-                    <View className="flex-row items-center space-x-2 mt-2">
-                      <MaterialIcons
-                        name="error-outline"
-                        size={16}
-                        color="red"
-                      />
-                      <Text style={{ color: "red" }}>
-                        {errors.item_description}
+                  <View className="relative w-full">
+                    <FormField
+                      title={
+                        <Text className="text-sm font-medium text-black">
+                          Product description
+                        </Text>
+                      }
+                      titleShow={true}
+                      value={values.item_description}
+                      handleChangeText={handleDescriptionChange}
+                      onBlur={handleBlur("item_description")}
+                      otherStyles="mt-2"
+                      placeholder="Enter item description here.."
+                      errorClass={`!h-[110px] ${
+                        touched.item_description && errors.item_description
+                          ? "!border-red-500"
+                          : ""
+                      } px-4 pt-4`}
+                      multiline={true}
+                      numberOfLines={4}
+                      style={{ textAlignVertical: "top" }}
+                    />
+
+                    {touched.item_description && errors.item_description ? (
+                      <View className="flex-row items-center space-x-2 mt-2">
+                        <MaterialIcons
+                          name="error-outline"
+                          size={16}
+                          color="red"
+                        />
+                        <Text style={{ color: "red" }}>
+                          {errors.item_description}
+                        </Text>
+                      </View>
+                    ) : null}
+                    <View className="w-full flex-row items-end justify-end">
+                      <Text className="text-sm text-gray-500 mt-2">
+                        {remainingWords}
                       </Text>
                     </View>
-                  ) : null}
-                </View>
-                <View className="relative w-full">
-                  <FormField
-                    title={
-                      <Text className="text-sm font-medium text-black">
-                        Brand
-                      </Text>
-                    }
-                    titleShow={true}
-                    value={values.brand}
-                    handleChangeText={handleChange("brand")}
-                    onBlur={handleBlur("brand")}
-                    otherStyles="mt-2"
-                    placeholder="Enter brand"
-                    errorClass={`${
-                      touched.brand && errors.brand ? "!border-red-500" : ""
-                    } px-4`}
-                  />
-                  {touched.brand && errors.brand ? (
-                    <View className="flex-row items-center space-x-2 mt-2">
-                      <MaterialIcons
-                        name="error-outline"
-                        size={16}
-                        color="red"
-                      />
-                      <Text style={{ color: "red" }}>{errors.brand}</Text>
+                  </View>
+
+                  <View className="w-full flex-col items-start justify-start space-y-3 border-t-[4px] py-4 mt-4 border-black/20">
+                    <Text className="text-lg font-semibold text-black">
+                      Info
+                    </Text>
+                    <View className="w-full">
+                      <View
+                        className={`w-full flex-row items-center justify-between border-b pb-3 ${
+                          touched.category && errors.category
+                            ? "!border-red-500"
+                            : "border-black/20"
+                        }`}
+                      >
+                        <Text className="text-base font-medium text-black">
+                          Category
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            categortBottomSheetModalRef.current?.present()
+                          }
+                          className="flex-row items-center justify-end space-x-2"
+                        >
+                          <Text className="text-sm font-medium text-gray-600">
+                            {values.category === ""
+                              ? "Select"
+                              : values.category}
+                          </Text>
+                          <Feather
+                            name="chevron-right"
+                            size={24}
+                            color="#4b5563"
+                          />
+                        </TouchableOpacity>
+                      </View>
+
+                      {touched.category && errors.category ? (
+                        <View className="flex-row items-center space-x-2 mt-2">
+                          <MaterialIcons
+                            name="error-outline"
+                            size={16}
+                            color="red"
+                          />
+                          <Text style={{ color: "red" }}>
+                            {errors.category}
+                          </Text>
+                        </View>
+                      ) : null}
                     </View>
-                  ) : null}
-                </View>
-                <View className="relative w-full">
-                  <FormField
-                    title={
-                      <Text className="text-sm font-medium text-black">
-                        Condition
-                      </Text>
-                    }
-                    titleShow={true}
-                    value={values.condition}
-                    handleChangeText={handleChange("condition")}
-                    onBlur={handleBlur("condition")}
-                    otherStyles="mt-2"
-                    placeholder="Enter condition"
-                    errorClass={`${
-                      touched.condition && errors.condition
-                        ? "!border-red-500"
-                        : ""
-                    } px-4`}
-                  />
-                  {touched.condition && errors.condition ? (
-                    <View className="flex-row items-center space-x-2 mt-2">
-                      <MaterialIcons
-                        name="error-outline"
-                        size={16}
-                        color="red"
-                      />
-                      <Text style={{ color: "red" }}>{errors.condition}</Text>
+                    <View className="w-full">
+                      <View
+                        className={`w-full flex-row items-center justify-between border-b pb-3 ${
+                          touched.brand && errors.brand
+                            ? "!border-red-500"
+                            : "border-black/20"
+                        }`}
+                      >
+                        <Text className="text-base font-medium text-black">
+                          Brand
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            brandBottomSheetModalRef.current?.present()
+                          }
+                          className="flex-row items-center justify-end space-x-2"
+                        >
+                          <Text className="text-sm font-medium text-gray-600">
+                            {values.brand === "" ? "Select" : values.brand}
+                          </Text>
+                          <Feather
+                            name="chevron-right"
+                            size={24}
+                            color="#4b5563"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      {touched.brand && errors.brand ? (
+                        <View className="flex-row items-center space-x-2 mt-2">
+                          <MaterialIcons
+                            name="error-outline"
+                            size={16}
+                            color="red"
+                          />
+                          <Text style={{ color: "red" }}>{errors.brand}</Text>
+                        </View>
+                      ) : null}
                     </View>
-                  ) : null}
-                </View>
-                <View className="relative w-full">
-                  <FormField
-                    title={
-                      <Text className="text-sm font-medium text-black">
-                        Price
-                      </Text>
-                    }
-                    titleShow={true}
-                    value={values.price}
-                    handleChangeText={handleChange("price")}
-                    onBlur={handleBlur("price")}
-                    otherStyles="mt-2"
-                    placeholder="Enter price"
-                    keyboardType="numeric"
-                    errorClass={`${
-                      touched.price && errors.price ? "!border-red-500" : ""
-                    } px-4`}
-                  />
-                  {touched.price && errors.price ? (
-                    <View className="flex-row items-center space-x-2 mt-2">
-                      <MaterialIcons
-                        name="error-outline"
-                        size={16}
-                        color="red"
-                      />
-                      <Text style={{ color: "red" }}>{errors.price}</Text>
+                    <View className="w-full">
+                      <View
+                        className={`w-full flex-row items-center justify-between border-b pb-3 ${
+                          touched.condition && errors.condition
+                            ? "!border-red-500"
+                            : "border-black/20"
+                        }`}
+                      >
+                        <Text className="text-base font-medium text-black">
+                          Condition
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            conditionBottomSheetModalRef.current?.present()
+                          }
+                          className="flex-row items-center justify-end space-x-2"
+                        >
+                          <Text className="text-sm font-medium text-gray-600">
+                            {values.condition === ""
+                              ? "Select"
+                              : values.condition}
+                          </Text>
+                          <Feather
+                            name="chevron-right"
+                            size={24}
+                            color="#4b5563"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      {touched.condition && errors.condition ? (
+                        <View className="flex-row items-center space-x-2 mt-2">
+                          <MaterialIcons
+                            name="error-outline"
+                            size={16}
+                            color="red"
+                          />
+                          <Text style={{ color: "red" }}>
+                            {errors.condition}
+                          </Text>
+                        </View>
+                      ) : null}
                     </View>
-                  ) : null}
+
+                    <View className="w-full flex-row items-center justify-between border-b border-black/20 pb-3">
+                      <Text className="text-base font-medium text-black">
+                        Color
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() =>
+                          colorBottomSheetModalRef.current?.present()
+                        }
+                        className="flex-row items-center justify-end space-x-2"
+                      >
+                        <Text className="text-sm font-medium text-gray-600">
+                          {values.color.length === 0
+                            ? "Select"
+                            : values.color.join(", ")}
+                        </Text>
+                        <Feather
+                          name="chevron-right"
+                          size={24}
+                          color="#4b5563"
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+                    <View className="w-full">
+                      <View
+                        className={`w-full flex-row items-center justify-between border-b pb-3 ${
+                          touched.condition && errors.condition
+                            ? "!border-red-500"
+                            : "border-black/20"
+                        }`}
+                      >
+                        <Text className="text-base font-medium text-black">
+                          Price
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            priceBottomSheetModalRef.current?.present()
+                          }
+                          className="flex-row items-center justify-end space-x-2"
+                        >
+                          <Text className="text-sm font-medium text-gray-600">
+                            {values.price === ""
+                              ? "Select"
+                              : `£ ${values.price}.00`}
+                          </Text>
+                          <Feather
+                            name="chevron-right"
+                            size={24}
+                            color="#4b5563"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      {touched.price && errors.price ? (
+                        <View className="flex-row items-center space-x-2 mt-2">
+                          <MaterialIcons
+                            name="error-outline"
+                            size={16}
+                            color="red"
+                          />
+                          <Text style={{ color: "red" }}>{errors.price}</Text>
+                        </View>
+                      ) : null}
+                    </View>
+                  </View>
                 </View>
-                <CustomButton
-                  title="Upload"
-                  containerStyles="bg-primary mt-8 w-full py-3"
-                  titleStyle="text-base font-medium text-black"
-                  isLoading={isSubmitting}
-                  handlePress={handleSubmit}
-                />
               </View>
             </View>
+          </ScrollView>
+          <View className="w-full flex-row items-center space-x-3 px-5 py-4 bg-white">
+            <View className="w-2/4">
+              <CustomButton
+                handlePress={() => handleSubmit()}
+                title="Save to drafts"
+                containerStyles="bg-white border border-dark !min-h-[48px]"
+                titleStyle="text-dark font-medium text-base"
+                disabled={isSubmitting}
+              />
+            </View>
+            <View className="w-2/4">
+              <CustomButton
+                handlePress={() => handleSubmit()}
+                title="Upload"
+                containerStyles="bg-primary !min-h-[48px]"
+                titleStyle="text-white font-medium text-base"
+                disabled={isSubmitting}
+              />
+            </View>
           </View>
-        </ScrollView>
+        </View>
       </KeyboardAvoidingView>
+      <CategoryBottomSheet
+        bottomSheetModalRef={categortBottomSheetModalRef}
+        setFieldValue={setFieldValue}
+        value={values.category}
+      />
+      <BrandBottomSheet
+        bottomSheetModalRef={brandBottomSheetModalRef}
+        setFieldValue={setFieldValue}
+      />
+      <ConditionBottomSheet
+        bottomSheetModalRef={conditionBottomSheetModalRef}
+        setFieldValue={setFieldValue}
+        value={values.condition}
+      />
+      <ColorBottomSheet
+        bottomSheetModalRef={colorBottomSheetModalRef}
+        setFieldValue={setFieldValue}
+        value={values.color}
+      />
+      <PriceBottomSheet
+        bottomSheetModalRef={priceBottomSheetModalRef}
+        setFieldValue={setFieldValue}
+        value={values.price}
+      />
       {successUploadingModal && (
         <View
           style={{
@@ -514,7 +550,7 @@ const SellModalScreen = () => {
           className="flex-col items-center justify-center space-y-5"
         >
           <Text className="text-sm text-center font-medium text-[#6B5656]">
-            Item upload succesfull
+            Item Listed Successfully
           </Text>
           <CustomButton
             title="View item"

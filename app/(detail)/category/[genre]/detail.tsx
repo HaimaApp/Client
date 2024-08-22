@@ -17,7 +17,12 @@ import { Product } from "@/types";
 import useFavouriteStore from "@/store/favorite";
 import Toast from "react-native-toast-message";
 import { formatGBPCurrency } from "@/helpers";
-import { AntDesign, Entypo, FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Entypo,
+  FontAwesome5,
+  FontAwesome6,
+} from "@expo/vector-icons";
 import { CustomButton, RangeSlider } from "@/components";
 
 const GenreDetail = () => {
@@ -33,15 +38,12 @@ const GenreDetail = () => {
 
   const filteredData = data
     ? data.filter((item) => {
-        // Filter by price range
         const isWithinPriceRange =
           item.price >= minPrice && item.price <= maxPrice;
 
-        // Filter by brand
         const isBrandSelected =
           selectedBrands.length === 0 || selectedBrands.includes(item.brand);
 
-        // Filter by search query
         const matchesSearchQuery =
           !searchQuery ||
           item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -66,8 +68,6 @@ const GenreDetail = () => {
     setMaxPrice(MAX_DEFAULT);
     setShowFilter(false);
   };
-
-  console.log(selectedBrands);
 
   return (
     <SafeAreaView className="flex-1 pt-4 bg-white">

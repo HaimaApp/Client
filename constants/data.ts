@@ -1,21 +1,21 @@
 export const onBoardingSlides = [
   {
     id: "1",
-    image: require("@/assets/images/onboardingImage.png"),
+    image: require("@/assets/icon.jpg"),
     title: "Welcome to a safe and secure market space for Muslim women!",
     subtitle:
       "Find your perfect fit: Explore a diverse range of modest clothing, accessories, beauty, and lifestyle essentials.",
   },
   {
     id: "2",
-    image: require("@/assets/images/onboardingImage.png"),
+    image: require("@/assets/icon.jpg"),
     title: "Shop Your Values, Embrace Your Style",
     subtitle:
       "Discover unique products from Muslim women you can proudly support and shop from",
   },
   {
     id: "3",
-    image: require("@/assets/images/onboardingImage.png"),
+    image: require("@/assets/icon.jpg"),
     title: "Verified Connections, Authentic Voice",
     subtitle:
       "Multi-layered security: Only verified women are welcomed, creating a trusted and supportive community.",
@@ -315,4 +315,436 @@ export const messagesData = [
     content: "https://via.placeholder.com/150",
     is_read: false,
   },
+];
+
+export const categoriesOptionsData = [
+  {
+    category: "Men",
+    subCategories: [
+      {
+        name: "Modest wear",
+        items: [
+          "Jilbaab 1-piece",
+          "Jilbaab 2-piece",
+          "Khimar",
+          "Abaya",
+          "Hijab",
+          "Niqab",
+          "Burkini",
+        ],
+      },
+      {
+        name: "Tops",
+        items: [
+          "T-shirts",
+          "Hoodies",
+          "Jumpers",
+          "Cardigans",
+          "Blouses",
+          "Shirts",
+        ],
+      },
+      {
+        name: "Bottoms",
+        items: ["Jeans", "Jogging bottoms", "Trousers", "Skirts"],
+      },
+      {
+        name: "Dresses",
+        items: ["Fancy dress", "Dress", "Jumpsuit", "Other"],
+      },
+      {
+        name: "Coats and jackets",
+        items: ["Waistcoat", "Blazer", "Coat and jacket", "Other"],
+      },
+      {
+        name: "Footwear",
+        items: [
+          "Trainers",
+          "Sliders",
+          "Sandals",
+          "Slippers",
+          "Loafers",
+          "Boots",
+          "Mules",
+          "Heels",
+          "Other",
+        ],
+      },
+      {
+        name: "Accessories",
+        items: [
+          "Bags",
+          "Belts",
+          "Hats",
+          "Caps",
+          "Gloves",
+          "Scarves",
+          "Sunglasses",
+          "Purses",
+          "Watch",
+          "Jewellery",
+          "Hair accessories",
+          "Other",
+        ],
+      },
+      {
+        name: "Nightwear",
+        items: ["Pyjamas", "Robes", "Other"],
+      },
+    ],
+  },
+  {
+    category: "Women",
+    subCategories: [
+      {
+        name: "Modest wear",
+        items: [
+          "Jilbaab 1-piece",
+          "Jilbaab 2-piece",
+          "Khimar",
+          "Abaya",
+          "Hijab",
+          "Niqab",
+          "Burkini",
+        ],
+      },
+      {
+        name: "Tops",
+        items: [
+          "T-shirts",
+          "Hoodies",
+          "Jumpers",
+          "Cardigans",
+          "Blouses",
+          "Shirts",
+        ],
+      },
+      {
+        name: "Bottoms",
+        items: ["Jeans", "Jogging bottoms", "Trousers", "Skirts"],
+      },
+      {
+        name: "Dresses",
+        items: ["Fancy dress", "Dress", "Jumpsuit", "Other"],
+      },
+      {
+        name: "Coats and jackets",
+        items: ["Waistcoat", "Blazer", "Coat and jacket", "Other"],
+      },
+      {
+        name: "Footwear",
+        items: [
+          "Trainers",
+          "Sliders",
+          "Sandals",
+          "Slippers",
+          "Loafers",
+          "Boots",
+          "Mules",
+          "Heels",
+          "Other",
+        ],
+      },
+      {
+        name: "Accessories",
+        items: [
+          "Bags",
+          "Belts",
+          "Hats",
+          "Caps",
+          "Gloves",
+          "Scarves",
+          "Sunglasses",
+          "Purses",
+          "Watch",
+          "Jewellery",
+          "Hair accessories",
+          "Other",
+        ],
+      },
+      {
+        name: "Nightwear",
+        items: ["Pyjamas", "Robes", "Other"],
+      },
+    ],
+  },
+  {
+    category: "Kids",
+    subCategories: [
+      {
+        name: "Modest wear",
+        items: [
+          "Jilbaab 1-piece",
+          "Jilbaab 2-piece",
+          "Khimar",
+          "Abaya",
+          "Hijab",
+          "Niqab",
+          "Burkini",
+        ],
+      },
+      {
+        name: "Tops",
+        items: [
+          "T-shirts",
+          "Hoodies",
+          "Jumpers",
+          "Cardigans",
+          "Blouses",
+          "Shirts",
+        ],
+      },
+      {
+        name: "Bottoms",
+        items: ["Jeans", "Jogging bottoms", "Trousers", "Skirts"],
+      },
+      {
+        name: "Dresses",
+        items: ["Fancy dress", "Dress", "Jumpsuit", "Other"],
+      },
+      {
+        name: "Coats and jackets",
+        items: ["Waistcoat", "Blazer", "Coat and jacket", "Other"],
+      },
+      {
+        name: "Footwear",
+        items: [
+          "Trainers",
+          "Sliders",
+          "Sandals",
+          "Slippers",
+          "Loafers",
+          "Boots",
+          "Mules",
+          "Heels",
+          "Other",
+        ],
+      },
+      {
+        name: "Accessories",
+        items: [
+          "Bags",
+          "Belts",
+          "Hats",
+          "Caps",
+          "Gloves",
+          "Scarves",
+          "Sunglasses",
+          "Purses",
+          "Watch",
+          "Jewellery",
+          "Hair accessories",
+          "Other",
+        ],
+      },
+      {
+        name: "Nightwear",
+        items: ["Pyjamas", "Robes", "Other"],
+      },
+    ],
+  },
+  {
+    category: "Everything else",
+    subCategories: [
+      {
+        name: "Modest wear",
+        items: [
+          "Jilbaab 1-piece",
+          "Jilbaab 2-piece",
+          "Khimar",
+          "Abaya",
+          "Hijab",
+          "Niqab",
+          "Burkini",
+        ],
+      },
+      {
+        name: "Tops",
+        items: [
+          "T-shirts",
+          "Hoodies",
+          "Jumpers",
+          "Cardigans",
+          "Blouses",
+          "Shirts",
+        ],
+      },
+      {
+        name: "Bottoms",
+        items: ["Jeans", "Jogging bottoms", "Trousers", "Skirts"],
+      },
+      {
+        name: "Dresses",
+        items: ["Fancy dress", "Dress", "Jumpsuit", "Other"],
+      },
+      {
+        name: "Coats and jackets",
+        items: ["Waistcoat", "Blazer", "Coat and jacket", "Other"],
+      },
+      {
+        name: "Footwear",
+        items: [
+          "Trainers",
+          "Sliders",
+          "Sandals",
+          "Slippers",
+          "Loafers",
+          "Boots",
+          "Mules",
+          "Heels",
+          "Other",
+        ],
+      },
+      {
+        name: "Accessories",
+        items: [
+          "Bags",
+          "Belts",
+          "Hats",
+          "Caps",
+          "Gloves",
+          "Scarves",
+          "Sunglasses",
+          "Purses",
+          "Watch",
+          "Jewellery",
+          "Hair accessories",
+          "Other",
+        ],
+      },
+      {
+        name: "Nightwear",
+        items: ["Pyjamas", "Robes", "Other"],
+      },
+    ],
+  },
+];
+
+export const brandDataOption = [
+  {
+    id: "01212h_m",
+    text: "H&M",
+  },
+  {
+    id: "01212zara",
+    text: "Zara",
+  },
+  {
+    id: "01212forever",
+    text: "Forever 21",
+  },
+  {
+    id: "01212uniqlo",
+    text: "Uniqlo",
+  },
+  {
+    id: "01212asos",
+    text: "ASOS",
+  },
+  {
+    id: "01212madewell",
+    text: "Madewell",
+  },
+  {
+    id: "01212banana_republic",
+    text: "Banana Republic",
+  },
+  {
+    id: "01212american_eagle_outfitters",
+    text: "American Eagle Outfitters",
+  },
+  {
+    id: "01212gap",
+    text: "Gap",
+  },
+  {
+    id: "01212shein",
+    text: "Shein",
+  },
+  {
+    id: "01212prettylittlething",
+    text: "PrettyLittleThing",
+  },
+  {
+    id: "01212boohoo",
+    text: "Boohoo",
+  },
+  {
+    id: "01212fashion_nova",
+    text: "Fashion Nova",
+  },
+  {
+    id: "01212aritizia",
+    text: "Aritzia",
+  },
+  { id: "01213urbanoutfitters", text: "Urban Outfitters" },
+  { id: "01214express", text: "Express" },
+  { id: "01215topshop", text: "Topshop" },
+  { id: "01216levis", text: "Levi's" },
+  { id: "01217jcrew", text: "J.Crew" },
+  { id: "01218everlane", text: "Everlane" },
+  { id: "01219reformation", text: "Reformation" },
+  { id: "01220missguided", text: "Missguided" },
+  { id: "01221mango", text: "Mango" },
+  { id: "01222lululemon", text: "Lululemon" },
+  { id: "01223adidas", text: "Adidas" },
+  { id: "01224nike", text: "Nike" },
+  { id: "01225chanel", text: "Chanel" },
+  { id: "01226gucci", text: "Gucci" },
+  { id: "01227prada", text: "Prada" },
+  { id: "01228louisvuitton", text: "Louis Vuitton" },
+  { id: "01229saintlaurent", text: "Saint Laurent" },
+  { id: "01230dior", text: "Dior" },
+  { id: "01231balenciaga", text: "Balenciaga" },
+  { id: "01232versace", text: "Versace" },
+  { id: "01233other", text: "Other" },
+];
+
+export const conditionDataOption = [
+  {
+    id: "01212Brand_new",
+    text: "Brand new",
+    desc: "Unused with original packaging or tags",
+  },
+  {
+    id: "01212like_new",
+    text: "Like new ",
+    desc: "Mint condition pre-owned or new without tags",
+  },
+  {
+    id: "01212used_excellent",
+    text: "Used - excellent",
+    desc: "Lightly used but no noticeable flaws",
+  },
+  {
+    id: "01212used_good",
+    text: "Used - good ",
+    desc: "Minor flaws or sign of wear, to be noted in the description or photo",
+  },
+  {
+    id: "01212used_fair",
+    text: "Used - fair ",
+    desc: "Obvious flaws or sign of wear, to be noted in the description or photo",
+  },
+];
+
+export const colorsOption = [
+  { id: "black00121012", text: "Black", color: "#000000" },
+  { id: "grey00121013", text: "Grey", color: "#808080" },
+  { id: "white00121014", text: "White", color: "#FFFFFF" },
+  { id: "brown00121015", text: "Brown", color: "#A52A2A" },
+  { id: "tin00121016", text: "Tin", color: "#D2B48C" },
+  { id: "cream00121017", text: "Cream", color: "#FFFDD0" },
+  { id: "yellow00121018", text: "Yellow", color: "#FFFF00" },
+  { id: "red00121019", text: "Red", color: "#FF0000" },
+  { id: "burgury00121020", text: "Burgundy", color: "#800020" },
+  { id: "orange00121021", text: "Orange", color: "#FFA500" },
+  { id: "pink00121022", text: "Pink", color: "#FFC0CB" },
+  { id: "purple00121023", text: "Purple", color: "#800080" },
+  { id: "blue00121024", text: "Blue", color: "#0000FF" },
+  { id: "navy00121025", text: "Navy", color: "#000080" },
+  { id: "green00121026", text: "Green", color: "#008000" },
+  { id: "17", text: "Multicolor", color: "multicolor" },
+  { id: "silver00121028", text: "Silver", color: "#C0C0C0" },
+  { id: "gold00121029", text: "Gold", color: "#FFD700" },
 ];
