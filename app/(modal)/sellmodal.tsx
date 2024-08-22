@@ -49,10 +49,9 @@ const SellModalScreen = () => {
     price: "",
   };
 
-  const onSubmit = (payload: sellItemFormType, action: any) => {
+  const onSubmit = (payload: sellItemFormType) => {
     console.log(payload);
     setSuccessUploadingModal(true);
-    action.resetForm();
   };
 
   const {
@@ -207,7 +206,14 @@ const SellModalScreen = () => {
                     </View>
                   )}
                 </View>
-
+                <TouchableOpacity
+                  onPress={() => router.push("/(modal)/photoguildmodal")}
+                  className="w-full flex-row items-center justify-center"
+                >
+                  <Text className="text-base font-semibold text-primary underline">
+                    Read our photo tips
+                  </Text>
+                </TouchableOpacity>
                 <View className="w-full flex-col items-start">
                   <Text className="text-sm font-medium text-black">
                     Enter Item description to upload
@@ -455,7 +461,7 @@ const SellModalScreen = () => {
                           <Text className="text-sm font-medium text-gray-600">
                             {values.price === ""
                               ? "Select"
-                              : `£ ${values.price}`}
+                              : `£ ${values.price}.00`}
                           </Text>
                           <Feather
                             name="chevron-right"
@@ -544,7 +550,7 @@ const SellModalScreen = () => {
           className="flex-col items-center justify-center space-y-5"
         >
           <Text className="text-sm text-center font-medium text-[#6B5656]">
-            Item upload succesfull
+            Item Listed Successfully
           </Text>
           <CustomButton
             title="View item"

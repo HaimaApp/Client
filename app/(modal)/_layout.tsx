@@ -14,6 +14,15 @@ const ModalLayout = () => {
             headerTransparent: true,
           }}
         />
+        <Stack.Screen
+          name="photoguildmodal"
+          options={{
+            presentation: "modal",
+            animation: "slide_from_bottom",
+            headerShown: false,
+            headerTransparent: true,
+          }}
+        />
       </Stack>
       <StatusBar backgroundColor="#FFFFFF" style="dark" />
     </>

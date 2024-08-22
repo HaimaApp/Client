@@ -10,7 +10,7 @@ import {
   BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetView,
+  BottomSheetSectionList,
 } from "@gorhom/bottom-sheet";
 import { MaterialIcons } from "@expo/vector-icons";
 import { brandDataOption } from "@/constants/data";
@@ -27,7 +27,6 @@ interface BrandBottomSheetProps {
 interface BrandType {
   id: string;
   text: string;
-  desc: string;
 }
 
 const BrandBottomSheet: React.FC<BrandBottomSheetProps> = ({
@@ -112,17 +111,16 @@ const BrandBottomSheet: React.FC<BrandBottomSheetProps> = ({
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        snapPoints={["90%", "90%"]}
+        snapPoints={["90%"]}
         index={0}
         backdropComponent={renderBackdrop}
         enablePanDownToClose={false}
       >
-        <BottomSheetView style={{ flex: 1, paddingBottom: 20 }}>
+        <View style={{ flex: 1, paddingBottom: 20 }}>
           <View className="w-full flex-row items-center justify-center mb-5 relative">
             <TouchableOpacity
               onPress={() => bottomSheetModalRef.current?.close()}
               className="flex-row items-center justify-start space-x-3 absolute top-1 left-4"
-              testID="close-button"
             >
               <MaterialIcons name="close" size={24} color="#4b5563" />
             </TouchableOpacity>
@@ -145,7 +143,7 @@ const BrandBottomSheet: React.FC<BrandBottomSheetProps> = ({
             />
           </View>
           <View className="w-full flex-1 flex-row relative">
-            <SectionList
+            <BottomSheetSectionList
               ref={sectionListRef}
               sections={groupedBrands}
               keyExtractor={(item) => item.id}
@@ -167,7 +165,7 @@ const BrandBottomSheet: React.FC<BrandBottomSheetProps> = ({
               </ScrollView>
             </View>
           </View>
-        </BottomSheetView>
+        </View>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );

@@ -6,7 +6,6 @@ import {
   BottomSheetFlatList,
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
@@ -148,7 +147,7 @@ const CategoryBottomSheet: React.FC<CategoryBottomSheetProps> = ({
         backdropComponent={renderBackdrop}
         enablePanDownToClose={false}
       >
-        <BottomSheetView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
           <View className="bg-white px-3 flex-1">
             {viewSubCategories ? (
               <Animated.View
@@ -223,7 +222,7 @@ const CategoryBottomSheet: React.FC<CategoryBottomSheetProps> = ({
               </Animated.View>
             )}
           </View>
-        </BottomSheetView>
+        </View>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );

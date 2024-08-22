@@ -5,7 +5,6 @@ import {
   BottomSheetFlatList,
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { Fontisto, MaterialIcons } from "@expo/vector-icons";
@@ -68,12 +67,12 @@ const ConditionBottomSheet: React.FC<ConditionBottomSheetProps> = ({
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        snapPoints={["50%", "60%"]}
+        snapPoints={["60%"]}
         index={0}
         backdropComponent={renderBackdrop}
         enablePanDownToClose={false}
       >
-        <BottomSheetView style={{ flex: 1, paddingBottom: 20 }}>
+        <View style={{ flex: 1, paddingBottom: 20 }}>
           <View className="w-full flex-row items-center justify-center mb-5 relative">
             <TouchableOpacity
               onPress={() => bottomSheetModalRef.current?.close()}
@@ -89,7 +88,7 @@ const ConditionBottomSheet: React.FC<ConditionBottomSheetProps> = ({
             renderItem={renderConditionItem}
             contentContainerStyle={{ flexGrow: 1 }}
           />
-        </BottomSheetView>
+        </View>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );

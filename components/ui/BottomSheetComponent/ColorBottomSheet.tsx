@@ -59,7 +59,7 @@ const ColorBottomSheet: React.FC<ColorBottomSheetProps> = ({
     return (
       <TouchableOpacity
         onPress={() => handleSelectColor(item.color)}
-        className={`p-4 flex-color items-center justify-start space-y-3 ${
+        className={`p-4 flex-col items-center justify-start space-y-3 ${
           isSelected ? "border-2 border-primary" : ""
         }`}
       >
@@ -68,7 +68,7 @@ const ColorBottomSheet: React.FC<ColorBottomSheetProps> = ({
             backgroundColor:
               item.color === "multicolor" ? undefined : item.color,
           }}
-          className={`w-14 h-14 rounded-full ${
+          className={`w-12 h-12 rounded-full ${
             isSelected ? "border-2 border-primary" : "border border-gray-200"
           }`}
         >
@@ -89,7 +89,7 @@ const ColorBottomSheet: React.FC<ColorBottomSheetProps> = ({
             />
           )}
         </View>
-        <Text className="text-base text-black">{item.text}</Text>
+        <Text className="text-sm text-black">{item.text}</Text>
       </TouchableOpacity>
     );
   };
@@ -109,12 +109,12 @@ const ColorBottomSheet: React.FC<ColorBottomSheetProps> = ({
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        snapPoints={["98%", "98%"]}
+        snapPoints={["98%"]}
         index={0}
         backdropComponent={renderBackdrop}
         enablePanDownToClose={false}
       >
-        <BottomSheetView style={{ flex: 1, paddingBottom: 20 }}>
+        <View style={{ flex: 1, paddingBottom: 20 }}>
           <View className="w-full flex-row items-center justify-center mb-5 relative">
             <TouchableOpacity
               onPress={() => bottomSheetModalRef.current?.close()}
@@ -135,8 +135,11 @@ const ColorBottomSheet: React.FC<ColorBottomSheetProps> = ({
             renderItem={renderColorItem}
             contentContainerStyle={{ flexGrow: 1 }}
             numColumns={4}
+            columnWrapperStyle={{
+              gap: 10,
+            }}
           />
-        </BottomSheetView>
+        </View>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );

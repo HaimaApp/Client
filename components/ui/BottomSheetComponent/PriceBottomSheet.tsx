@@ -4,12 +4,11 @@ import {
   BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetTextInput,
-  BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
+import { TextInput } from "react-native";
 
 interface PriceBottomSheetProps {
   bottomSheetModalRef: React.RefObject<BottomSheetModalMethods>;
@@ -37,12 +36,12 @@ const PriceBottomSheet: React.FC<PriceBottomSheetProps> = ({
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        snapPoints={["90%", "90%"]}
+        snapPoints={["90%"]}
         index={0}
         backdropComponent={renderBackdrop}
         enablePanDownToClose={false}
       >
-        <BottomSheetView style={{ flex: 1, paddingBottom: 20 }}>
+        <View style={{ flex: 1, paddingBottom: 20 }}>
           <View className="w-full flex-row items-center justify-center mb-5 relative">
             <TouchableOpacity
               onPress={() => bottomSheetModalRef.current?.close()}
@@ -53,19 +52,18 @@ const PriceBottomSheet: React.FC<PriceBottomSheetProps> = ({
             <Text className="text-lg font-semibold text-black">Price</Text>
           </View>
           <View className="w-full flex-1 relative px-5">
-            <BottomSheetTextInput
+            <TextInput
               value={value}
               onChangeText={(val) => setFieldValue("price", val)}
               placeholder="0"
               keyboardType="numeric"
               style={styles.input}
-            
             />
             <Text className="absolute top-2 left-9 text-lg font-medium text-black">
               £
             </Text>
           </View>
-        </BottomSheetView>
+        </View>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );

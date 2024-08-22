@@ -622,30 +622,82 @@ export const categoriesOptionsData = [
 
 export const brandDataOption = [
   {
-    id: "01212Brand_new",
-    text: "Brand new",
-    desc: "Unused with original packaging or tags",
+    id: "01212h_m",
+    text: "H&M",
   },
   {
-    id: "01212like_new",
-    text: "Like new ",
-    desc: "Mint condition pre-owned or new without tags",
+    id: "01212zara",
+    text: "Zara",
   },
   {
-    id: "01212used_excellent",
-    text: "Used - excellent",
-    desc: "Lightly used but no noticeable flaws",
+    id: "01212forever",
+    text: "Forever 21",
   },
   {
-    id: "01212used_good",
-    text: "Used - good ",
-    desc: "Minor flaws or sign of wear, to be noted in the description or photo",
+    id: "01212uniqlo",
+    text: "Uniqlo",
   },
   {
-    id: "01212used_fair",
-    text: "Used - fair ",
-    desc: "Obvious flaws or sign of wear, to be noted in the description or photo",
+    id: "01212asos",
+    text: "ASOS",
   },
+  {
+    id: "01212madewell",
+    text: "Madewell",
+  },
+  {
+    id: "01212banana_republic",
+    text: "Banana Republic",
+  },
+  {
+    id: "01212american_eagle_outfitters",
+    text: "American Eagle Outfitters",
+  },
+  {
+    id: "01212gap",
+    text: "Gap",
+  },
+  {
+    id: "01212shein",
+    text: "Shein",
+  },
+  {
+    id: "01212prettylittlething",
+    text: "PrettyLittleThing",
+  },
+  {
+    id: "01212boohoo",
+    text: "Boohoo",
+  },
+  {
+    id: "01212fashion_nova",
+    text: "Fashion Nova",
+  },
+  {
+    id: "01212aritizia",
+    text: "Aritzia",
+  },
+  { id: "01213urbanoutfitters", text: "Urban Outfitters" },
+  { id: "01214express", text: "Express" },
+  { id: "01215topshop", text: "Topshop" },
+  { id: "01216levis", text: "Levi's" },
+  { id: "01217jcrew", text: "J.Crew" },
+  { id: "01218everlane", text: "Everlane" },
+  { id: "01219reformation", text: "Reformation" },
+  { id: "01220missguided", text: "Missguided" },
+  { id: "01221mango", text: "Mango" },
+  { id: "01222lululemon", text: "Lululemon" },
+  { id: "01223adidas", text: "Adidas" },
+  { id: "01224nike", text: "Nike" },
+  { id: "01225chanel", text: "Chanel" },
+  { id: "01226gucci", text: "Gucci" },
+  { id: "01227prada", text: "Prada" },
+  { id: "01228louisvuitton", text: "Louis Vuitton" },
+  { id: "01229saintlaurent", text: "Saint Laurent" },
+  { id: "01230dior", text: "Dior" },
+  { id: "01231balenciaga", text: "Balenciaga" },
+  { id: "01232versace", text: "Versace" },
+  { id: "01233other", text: "Other" },
 ];
 
 export const conditionDataOption = [
