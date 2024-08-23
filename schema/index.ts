@@ -62,7 +62,7 @@ export const sellFormSchema = yup.object().shape({
   category: yup.string().required("please select a category"),
   brand: yup.string().required("please select a brand"),
   condition: yup.string().required("please select a condition"),
-  size: yup.string().required("please select a size"),
+  size: yup.string().notRequired(),
   price: yup
     .number()
     .required("Price is required")
