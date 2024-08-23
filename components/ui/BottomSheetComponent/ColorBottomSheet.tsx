@@ -5,7 +5,6 @@ import {
   BottomSheetFlatList,
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -34,7 +33,7 @@ const ColorBottomSheet: React.FC<ColorBottomSheetProps> = ({
   const handleSelectColor = useCallback(
     (color: string) => {
       let newSelectedColors = [...selectedColors];
-      if (color === "multicolor") {
+      if (color === "Multicolor") {
         newSelectedColors = ["Multicolor"];
       } else {
         if (newSelectedColors.includes(color)) {
@@ -54,14 +53,12 @@ const ColorBottomSheet: React.FC<ColorBottomSheetProps> = ({
   );
 
   const renderColorItem = ({ item }: { item: ColorType }) => {
-    const isSelected = selectedColors.includes(item.color);
+    const isSelected = selectedColors.includes(item.text);
 
     return (
       <TouchableOpacity
-        onPress={() => handleSelectColor(item.color)}
-        className={`p-4 flex-col items-center justify-start space-y-3 ${
-          isSelected ? "border-2 border-primary" : ""
-        }`}
+        onPress={() => handleSelectColor(item.text)}
+        className="p-4 flex-col items-center justify-start space-y-3"
       >
         <View
           style={{
@@ -69,7 +66,9 @@ const ColorBottomSheet: React.FC<ColorBottomSheetProps> = ({
               item.color === "multicolor" ? undefined : item.color,
           }}
           className={`w-12 h-12 rounded-full ${
-            isSelected ? "border-2 border-primary" : "border border-gray-200"
+            isSelected
+              ? "border-[3px] border-primary"
+              : "border border-gray-200"
           }`}
         >
           {item.color === "multicolor" && (

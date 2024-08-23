@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CustomButton, FormField, Topheader } from "@/components";
+import {
+  CustomButton,
+  FormField,
+  SocialLoginButton,
+  Topheader,
+} from "@/components";
 import { icons } from "@/constants";
 import { authFormSchema } from "@/schema";
 import { useFormik } from "formik";
@@ -143,38 +148,7 @@ const LoginScreen = () => {
             <View className="py-3 w-full flex-row items-center justify-center">
               <Text className="text-sm font-normal text-black">or</Text>
             </View>
-            <CustomButton
-              title={
-                <View className="flex-row items-center justify-center space-x-4 w-full h-full">
-                  <Image
-                    source={icons.googleIcon}
-                    alt="Google icons"
-                    resizeMode="contain"
-                  />
-                  <Text className="text-base font-medium text-black">
-                    Sign in with Google
-                  </Text>
-                </View>
-              }
-              containerStyles="w-full py-3 mt-3 border border-primary"
-              titleStyle="text-base font-medium text-black"
-            />
-            <CustomButton
-              title={
-                <View className="flex-row items-center justify-center space-x-4 w-full h-full">
-                  <Image
-                    source={icons.appleIcon}
-                    alt="Apple icons"
-                    resizeMode="contain"
-                  />
-                  <Text className="text-base font-medium text-white">
-                    Sign in with Apple
-                  </Text>
-                </View>
-              }
-              containerStyles="w-full py-3 mt-3 bg-black border border-black"
-              titleStyle="text-base font-medium text-black"
-            />
+            <SocialLoginButton />
             <View className="flex-row items-center justify-center space-x-1 py-4 w-full">
               <Text className="text-sm font-normal text-black">New here?</Text>
               <TouchableOpacity onPress={() => router.push("/register")}>

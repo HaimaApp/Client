@@ -7,6 +7,7 @@ import CustomButton from "./ui/CustomizeButton";
 import StarRate from "./ui/StarRate";
 import RangeSlider from "./auth/RangeSlider";
 import ModalPopUp from "./ui/ModalPopUp";
+import SocialLoginButton from "./auth/SocialLoginButton";
 
 export {
   CustomButton,
@@ -18,4 +19,5 @@ export {
   RangeSlider,
   NavHeader,
   ModalPopUp,
+  SocialLoginButton,
 };

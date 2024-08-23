@@ -45,12 +45,24 @@ export const creditFormSchema = yup.object().shape({
   cvv: yup.string().required("Required"),
 });
 
+const imageSchema = yup.object().shape({
+  uri: yup.string().required("Image URI is required"),
+  name: yup.string().required("image name is required"),
+  type: yup.string().required("image type is required"),
+});
+
 export const sellFormSchema = yup.object().shape({
+  images: yup
+    .array()
+    .of(imageSchema)
+    .min(1, "At least one image is required")
+    .required("please select an images"),
   item_name: yup.string().required("item name is required"),
   item_description: yup.string().required("item description is required"),
   category: yup.string().required("please select a category"),
   brand: yup.string().required("please select a brand"),
-  condition: yup.string().required("please select a category"),
+  condition: yup.string().required("please select a condition"),
+  size: yup.string().required("please select a size"),
   price: yup
     .number()
     .required("Price is required")
