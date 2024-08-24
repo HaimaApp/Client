@@ -4,6 +4,7 @@ import CategoryBottomSheet from "./CategoryBottomSheet";
 import ColorBottomSheet from "./ColorBottomSheet";
 import ConditionBottomSheet from "./ConditionBottomSheet";
 import PriceBottomSheet from "./PriceBottomSheet";
+import SizeBottomSheet from "./SizeBottomSheetModal";
 
 export {
   BottomSheetModalContent,
@@ -12,4 +13,5 @@ export {
   ConditionBottomSheet,
   ColorBottomSheet,
   PriceBottomSheet,
+  SizeBottomSheet,
 };

@@ -748,3 +748,110 @@ export const colorsOption = [
   { id: "silver00121028", text: "Silver", color: "#C0C0C0" },
   { id: "gold00121029", text: "Gold", color: "#FFD700" },
 ];
+
+export const sizeDataOption = [
+  {
+    id: "size_one_size",
+    text: "One size",
+  },
+  {
+    id: "size_uk_2",
+    text: "UK 2",
+  },
+  {
+    id: "size_uk_3",
+    text: "UK 3",
+  },
+  {
+    id: "size_uk_4",
+    text: "UK 4",
+  },
+  {
+    id: "size_uk_5",
+    text: "UK 5",
+  },
+  {
+    id: "size_uk_5_5",
+    text: "UK 5.5",
+  },
+  {
+    id: "size_uk_6",
+    text: "UK 6",
+  },
+  {
+    id: "size_uk_6_5",
+    text: "UK 6.5",
+  },
+  {
+    id: "size_uk_7",
+    text: "UK 7",
+  },
+  {
+    id: "size_uk_7_5",
+    text: "UK 7.5",
+  },
+  {
+    id: "size_uk_8",
+    text: "UK 8",
+  },
+  {
+    id: "size_uk_8_5",
+    text: "UK 8.5",
+  },
+  {
+    id: "size_uk_9",
+    text: "UK 9",
+  },
+  {
+    id: "size_uk_9_5",
+    text: "UK 9.5",
+  },
+  {
+    id: "size_uk_10",
+    text: "UK 10",
+  },
+  {
+    id: "size_uk_10_5",
+    text: "UK 10.5",
+  },
+  {
+    id: "size_uk_11",
+    text: "UK 11",
+  },
+  {
+    id: "size_uk_11_5",
+    text: "UK 11.5",
+  },
+  {
+    id: "size_uk_12",
+    text: "UK 12",
+  },
+  {
+    id: "size_uk_12_5",
+    text: "UK 12.5",
+  },
+  {
+    id: "size_uk_13",
+    text: "UK 13",
+  },
+  {
+    id: "size_uk_13_5",
+    text: "UK 13.5",
+  },
+  {
+    id: "size_uk_14",
+    text: "UK 14",
+  },
+  {
+    id: "size_uk_14_5",
+    text: "UK 14.5",
+  },
+  {
+    id: "size_uk_15",
+    text: "UK 15",
+  },
+  {
+    id: "size_other",
+    text: "Other",
+  },
+];

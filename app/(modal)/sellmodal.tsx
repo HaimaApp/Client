@@ -25,6 +25,7 @@ import {
   ColorBottomSheet,
   ConditionBottomSheet,
   PriceBottomSheet,
+  SizeBottomSheet,
 } from "@/components/ui/BottomSheetComponent";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 
@@ -35,6 +36,7 @@ const SellModalScreen = () => {
   const brandBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
   const conditionBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
   const colorBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+  const sizeBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
   const priceBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
   const flatListRef = useRef<FlatList>(null);
 
@@ -45,6 +47,7 @@ const SellModalScreen = () => {
     category: "",
     brand: "",
     condition: "",
+    size: "",
     color: [],
     price: "",
   };
@@ -162,6 +165,7 @@ const SellModalScreen = () => {
                   <Text className="text-xs font-normal text-[#98A2B3]">
                     You can add up to 20 item images
                   </Text>
+
                   {values.images.length === 0 && (
                     <CustomButton
                       handlePress={pickImages}
@@ -173,9 +177,29 @@ const SellModalScreen = () => {
                           </Text>
                         </View>
                       }
-                      containerStyles="bg-white border border-primary px-3 mt-6"
+                      containerStyles={`bg-white border px-3 mt-6 ${
+                        touched.images && errors.images
+                          ? "border-red-400"
+                          : "border-primary"
+                      }`}
                     />
                   )}
+                  {touched.images && errors.images ? (
+                    <View>
+                      <View className="flex-row items-center space-x-2 mt-2">
+                        <MaterialIcons
+                          name="error-outline"
+                          size={16}
+                          color="red"
+                        />
+                        <Text style={{ color: "red" }}>
+                          {Array.isArray(errors.images)
+                            ? errors.images.join(", ")
+                            : errors.images}
+                        </Text>
+                      </View>
+                    </View>
+                  ) : null}
                   {values.images.length > 0 && (
                     <View className="w-full">
                       <FlatList
@@ -440,6 +464,26 @@ const SellModalScreen = () => {
                         />
                       </TouchableOpacity>
                     </View>
+                    <View className="w-full flex-row items-center justify-between border-b border-black/20 pb-3">
+                      <Text className="text-base font-medium text-black">
+                        Size
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() =>
+                          sizeBottomSheetModalRef.current?.present()
+                        }
+                        className="flex-row items-center justify-end space-x-2"
+                      >
+                        <Text className="text-sm font-medium text-gray-600">
+                          {values.size === "" ? "Select" : values.size}
+                        </Text>
+                        <Feather
+                          name="chevron-right"
+                          size={24}
+                          color="#4b5563"
+                        />
+                      </TouchableOpacity>
+                    </View>
 
                     <View className="w-full">
                       <View
@@ -526,6 +570,11 @@ const SellModalScreen = () => {
         bottomSheetModalRef={colorBottomSheetModalRef}
         setFieldValue={setFieldValue}
         value={values.color}
+      />
+      <SizeBottomSheet
+        bottomSheetModalRef={sizeBottomSheetModalRef}
+        setFieldValue={setFieldValue}
+        value={values.size}
       />
       <PriceBottomSheet
         bottomSheetModalRef={priceBottomSheetModalRef}

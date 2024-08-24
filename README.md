@@ -1,10 +1,10 @@
-# Rydah Ecommerce App Project
+# Haima Ecommerce App Project
 
 This project is a simple ecommerce applications for muslims, with user security at it's core.
 
 ## Table of Contents
 
-- [Rydah Ecommerce App Project](#rydah-ecommerce-app-project)
+- [Haima Ecommerce App Project](#haima-ecommerce-app-project)
   - [Table of Contents](#table-of-contents)
   - [About](#about)
   - [Dependencies](#dependencies)
@@ -79,11 +79,11 @@ Follow these instructions to get the project up and running on your local machin
 
 1. Clone the repository:
    ```bash
-   git clone hhttps://github.com/RydahApp/Rydah.git
+   git clone https://github.com/HaimaApp/Client.git
    ```
 2. Navigate into the project directory:
    ```bash
-   cd Rydah
+   cd Client
    ```
 3. Install dependencies:
    ```bash

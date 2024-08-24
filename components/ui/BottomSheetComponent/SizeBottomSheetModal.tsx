@@ -2,25 +2,38 @@ import React, { useCallback } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import {
   BottomSheetBackdrop,
+  BottomSheetFlatList,
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { sizeDataOption } from "@/constants/data";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
-import { MaterialIcons } from "@expo/vector-icons";
-import { StyleSheet } from "react-native";
-import { TextInput } from "react-native";
 
-interface PriceBottomSheetProps {
+interface SizeBottomSheetProps {
   bottomSheetModalRef: React.RefObject<BottomSheetModalMethods>;
   setFieldValue: (field: string, value: any) => void;
   value: string;
 }
 
-const PriceBottomSheet: React.FC<PriceBottomSheetProps> = ({
+interface SizeType {
+  id: string;
+  text: string;
+}
+
+const SizeBottomSheet: React.FC<SizeBottomSheetProps> = ({
   bottomSheetModalRef,
   setFieldValue,
   value,
 }) => {
+  const handleCloseBottomSheet = useCallback(
+    (size: string) => {
+      setFieldValue("size", size);
+      bottomSheetModalRef.current?.close();
+    },
+    [setFieldValue, bottomSheetModalRef]
+  );
+
   const renderBackdrop = useCallback(
     (props: any) => (
       <BottomSheetBackdrop
@@ -30,6 +43,16 @@ const PriceBottomSheet: React.FC<PriceBottomSheetProps> = ({
       />
     ),
     []
+  );
+
+  const renderSizeItem = ({ item }: { item: SizeType }) => (
+    <TouchableOpacity
+      onPress={() => handleCloseBottomSheet(item.text)}
+      className="p-4 border-b border-[#ddd] flex-row items-center justify-between"
+    >
+      <Text className="text-base text-black">{item.text}</Text>
+      {value === item.text && <Feather name="check" size={24} color="#4b5563" />}
+    </TouchableOpacity>
   );
 
   return (
@@ -49,15 +72,14 @@ const PriceBottomSheet: React.FC<PriceBottomSheetProps> = ({
             >
               <MaterialIcons name="close" size={24} color="#4b5563" />
             </TouchableOpacity>
-            <Text className="text-lg font-semibold text-black">Price</Text>
+            <Text className="text-lg font-semibold text-black">Size</Text>
           </View>
-          <View className="w-full flex-1 relative px-5">
-            <TextInput
-              value={value}
-              onChangeText={(val) => setFieldValue("price", val)}
-              placeholder="£ 0.00"
-              keyboardType="numeric"
-              style={styles.input}
+
+          <View className="w-full flex-1 flex-row relative">
+            <BottomSheetFlatList
+              data={sizeDataOption}
+              keyExtractor={(item) => item.id}
+              renderItem={renderSizeItem}
             />
           </View>
         </View>
@@ -66,25 +88,4 @@ const PriceBottomSheet: React.FC<PriceBottomSheetProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    flex: 1,
-    position: "relative",
-  },
-  input: {
-    width: "100%",
-    height: 48,
-    paddingLeft: 4,
-    paddingRight: 16,
-    backgroundColor: "#FFF",
-    borderRadius: 8,
-    borderColor: "#D0D5DD",
-    borderBottomWidth: 1,
-    fontSize: 18,
-    fontWeight: "500",
-    color: "#000",
-  },
-});
-
-export default PriceBottomSheet;
+export default SizeBottomSheet;

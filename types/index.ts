@@ -74,6 +74,7 @@ export interface sellItemFormType {
   category: string;
   color: string[];
   condition: string;
+  size: string;
   price: string;
 }
 
